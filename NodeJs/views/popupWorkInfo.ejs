@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+		
+		<title>근무 상세보기</title>
+		
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    	
+    	<style>
+        	body        { padding-bottom:10px; }
+		</style>  
+		
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="js/jquery.messagebox.js"></script>
+		<script type="text/javascript">
+			var msg;
+			$( document ).ready(function() {
+
+				msg = $("body").messageBox({
+					modal:true,
+					autoClose: 0,
+					locale:{
+					NO : 'No',
+					YES : 'Yes',
+					CANCEL : 'Cancel',
+					OK : 'Okey',
+					textAutoClose: 'Auto close in %d seconds'
+					}
+				});
+			
+				$.ajax({
+					url: "/workInfoFind",
+					type: 'POST',
+					data: {_id:$("#_id").val(), _kb:$("#_kb").val()},
+					success : function(data) {
+						if(data.workList.length == 1) {
+							$("#workDate").val(data.workList[0].workDate.substring(0,4)
+												+ "년 "
+												+ data.workList[0].workDate.substring(4,6) 
+												+ "월 "
+												+ data.workList[0].workDate.substring(6,8)
+												+ "일");
+							$("#workTimeS").val(data.workList[0].workTimeS.substring(8,10)
+												+ "시 "
+												+ data.workList[0].workTimeS.substring(10,12)
+												+ "분");
+							$("#workTimeE").val(data.workList[0].workTimeE.substring(8,10)
+												+ "시 "
+												+ data.workList[0].workTimeE.substring(10,12) 
+												+ "분");
+							if($("#_kb").val() == '0') {
+								$("#workOver").val(data.workList[0].workOver * -1 + "분")
+							}else{
+								$("#workOver").val(data.workList[0].workOver + "분")
+							}
+							
+							$("#overTimeReason").val(data.workList[0].overTimeReason)
+							var _statusNm = "";
+							if(data.workList[0].status == 1) {
+								_statusNm = "처리완료";
+								$("#updateWorkInfo").hide();
+
+							}else if(data.workList[0].status == 2) {
+								_statusNm = "반려";
+							}else{
+								_statusNm = "미처리";
+								if($("#_role").val() == '1') {
+									$("#updateWorkInfo").show();
+								}
+							}
+							
+							$("#status").val(_statusNm);
+						}
+					},
+					error : function() {				
+						alert("정보 취득 실패");
+					}
+				});
+
+				$("#updateWorkInfo").click(function(){
+					$("#_status").val('1');				
+
+					$.ajax({
+					url: "/workInfoUpdate",
+					type: 'POST',
+					data: 
+						//{_id:$("#_id").val(), _status:"1", _kb:$("#_kb").val(), _name:$("#name").val()},
+						$("form[name=target]").serialize(),
+						success : function(data) {
+							msg.data('messageBox').info('안내', '등록완료 되었습니다. ', 10, false);
+							window.opener.fnRefresh();
+							$("#updateWorkInfo").hide();
+						},
+						error : function() {				
+							msg.data('messageBox').danger('경고', '정보 취득 실패. ', 10, false);
+						}
+					});
+				});
+
+				$("#deleteWorkInfo").click(function(){
+					$.ajax({
+					url: "/workInfoDelete",
+					type: 'post',
+					data: {_id:$("#_id").val()},
+						success : function(data) {
+							msg.data('messageBox').info('안내', '삭제완료 되었습니다. ', 10, false);
+							window.opener.fnRefresh();
+							$("#updateWorkInfo").hide();
+							$("#deleteWorkInfo").hide();
+						},
+						error : function() {				
+							msg.data('messageBox').danger('경고', '정보 취득 실패. ', 10, false);
+						}
+					});
+				});
+
+				$("#showPdf").click(function(){
+					var rex = "/(<([^>]+)>)/ig";
+					$.ajax({
+						url: "/pdfExport",
+						type: 'POST',
+						data: $("form[name=target]").serialize(),
+							success : function(data) {								
+								window.location = '/savePdf?fileName=' + data.filename + '&NewFileName=' + $("#workDate").val() + $("#name").val() ;			
+							},
+							error : function() {				
+							}
+					});
+				});
+			});
+		</script>
+	</head>
+	
+	<body>
+		<div class="container" id="mainForm">
+			<div class="col-sm-6 col-sm-offset-3">		
+			    <div class="py-5 text-center">
+					<h2>상세보기 (<%= kbName %>)</h2>
+					<div style="text-align:right;">
+						<button type="button" id="showPdf" class="btn btn btn-warning" style="width:60px;">출력</button>
+					</div>
+				</div>
+				<form id="target" name="target">	
+					<div class="form-group">
+						<label>신청자 : </label>
+						<input type="text" class="form-control" id="name" name="name"  readonly="true"  value=<%= _name %> />
+					</div>
+					<div class="form-group">
+						<label>근무일자 : </label>
+						<input type="text" class="form-control" id="workDate" name="workDate" readonly="true" />
+					</div>
+					<div class="form-group">
+						<label>출근시간 : </label>
+						<input type="text" class="form-control" id="workTimeS" name="workTimeS" readonly="true" />
+					</div>
+					<div class="form-group">
+						<label>퇴근시간 : </label>
+						<input type="text" class="form-control" id="workTimeE" name="workTimeE" readonly="true" />
+					</div>
+					<% if (_kb == 1) { %>
+						<div class="form-group">
+							<label>야근시간 : </label>
+							<input type="text" class="form-control" id="workOver" name="workOver" readonly="true" />
+						</div>
+						<div class="form-group">
+							<label>야근사유 : </label>
+							<input type="text" class="form-control" id="overTimeReason"  name="overTimeReason" readonly="true" />
+						</div>
+					<% }else{ %>
+						<div class="form-group">
+							<label>휴가시간 : </label>
+							<input type="text" class="form-control" id="workOver" name="workOver" readonly="true" />
+						</div>
+						<div class="form-group">
+							<label>휴가사유 : </label>
+							<input type="text" class="form-control" id="overTimeReason"  name="overTimeReason" readonly="true" />
+						</div>
+					<% } %>
+
+					
+					<div class="form-group">
+						<label>승인상태 : </label>
+						<input type="text" class="form-control" id="status"  name="status" readonly="true" />
+					</div>
+					<div>
+						<button type="button" id="updateWorkInfo" class="btn btn-lg btn-primary btn-block">승인</button>
+						<button type="button" id="deleteWorkInfo" class="btn btn-lg btn-primary btn-block">삭제</button>
+					</div>
+					<input type="hidden" id="_id" name="_id" value=<%= _id %> />
+					<input type="hidden" id="_role" name="_role" value=<%= _role %>>
+					<input type="hidden" id="_kb" name="_kb" value=<%= _kb %>>
+					<input type="hidden" id="_status" name="_status">
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

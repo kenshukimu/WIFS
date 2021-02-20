@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIFS", "WIFS\WIFS.csproj", "{68F5BD76-836D-4755-88D6-92F22D108CD8}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WIFS_SETUP", "WIFS_SETUP\WIFS_SETUP.vdproj", "{A9917F13-F308-49B5-A937-196C2D4867B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68F5BD76-836D-4755-88D6-92F22D108CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68F5BD76-836D-4755-88D6-92F22D108CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68F5BD76-836D-4755-88D6-92F22D108CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68F5BD76-836D-4755-88D6-92F22D108CD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9917F13-F308-49B5-A937-196C2D4867B6}.Debug|Any CPU.ActiveCfg = Debug
+		{A9917F13-F308-49B5-A937-196C2D4867B6}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6869B1A4-F408-46B4-8FCC-897CA40C4038}
+	EndGlobalSection
+EndGlobal

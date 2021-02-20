@@ -1,0 +1,41 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "node.js project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenshukimu/PlayGround.git"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "kenshukimu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kenshukimu/PlayGround/issues"
+  },
+  "homepage": "https://github.com/kenshukimu/PlayGround#readme",
+  "dependencies": {
+    "chart.js": "^2.9.4",
+    "ejs": "^3.1.5",
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "gasparesganga-jquery-message-box": "^3.2.2",
+    "html-pdf": "^2.2.0",
+    "jquery": "^3.5.1",
+    "jquery-confirm": "^3.3.4",
+    "json-pretty-html": "^1.1.6",
+    "mime": "^2.5.0",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.9",
+    "nconf": "^0.11.0",
+    "nodemailer": "^6.4.18",
+    "serve-static": "^1.14.1"
+  }
+}

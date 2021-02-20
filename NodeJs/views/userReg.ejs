@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+		
+		<title>사용자 등록</title>
+		
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    	
+    	<style>
+        	body        { padding-top:80px; }
+		</style>  
+		
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="js/jquery.messagebox.js"></script>
+		<script type="text/javascript">
+			var msg;
+			$( document ).ready(function() {
+
+				msg = $("body").messageBox({
+					modal:true,
+					autoClose: 0,
+					locale:{
+					NO : 'No',
+					YES : 'Yes',
+					CANCEL : 'Cancel',
+					OK : 'Okey',
+					textAutoClose: 'Auto close in %d seconds'
+					}
+				});
+
+				$("#userReg").click(function(){					
+					if(fn_validate()) {
+						$('#target').submit();
+					}
+				});
+
+				$("#goLogin").click(function(){
+					location.href = "/";
+				});
+
+				$.ajax({
+					url: '/getCode',
+					type: 'POST',
+					data: {'codeGroup' : 'dept'},
+					success : function(data) {
+						
+						var _projectList = "<option value='init'>프로젝트선택</option>";
+						for(var i=0; i< data.codes.length; i++) {
+							_projectList += "<option value='" + data.codes[i].codeName + "^" + data.codes[i].codeValue + "'>" + data.codes[i].codeName + "</option>";
+						}
+						$("#project").html(_projectList);
+					},
+						error : function() {	
+							msg.data('messageBox').danger('경고', '프로젝트 리스트 취득 실패. ', 10, false);
+					}
+				});
+			});
+
+			//정합성체크
+			function fn_validate() {
+
+                var passwordRules = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+
+				var _id = $('input[name=id]').val();					
+				if(_id.length < 1) {
+					msg.data('messageBox').danger('경고', '아이디를 입력하여 주시기 바랍니다. ', 10, false);
+					return false;
+				}
+				
+				var _name = $('input[name=name]').val();					
+				if(_name.length < 1) {
+					msg.data('messageBox').danger('경고', '이름을 입력하여 주시기 바랍니다. ', 10, false);
+					return false;
+				}
+
+				var _password = $('input[name=password]').val();					
+				if(_password.length < 1) {
+					msg.data('messageBox').danger('경고', '패스워드를 입력하여 주시기 바랍니다. ', 10, false);
+					return false;
+				}
+
+				var index = $("#project option").index($("#project option:selected"));
+				if(index == 0) {
+					msg.data('messageBox').danger('경고', '프로젝트를 선택하여 주시기 바랍니다. ', 10, false);
+					return false;
+				}
+
+				if(!chkPwd(_password)) {					
+					return false;
+				}
+
+				return true;
+			}
+
+			function chkPwd(str) {
+
+				var pw = str;
+				var num = pw.search(/[0-9]/g);
+				var eng = pw.search(/[a-z]/ig);
+				var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+				var andMark = pw.search(/[&]/gi);
+
+				if (pw.length < 9 || pw.length > 15) {
+					msg.data('messageBox').danger('경고', "9자리 ~ 15자리 이내로 입력해주세요.", 10, false);
+					return false;
+				}
+
+				//if (pw.length == 8 || pw.length == 9) {
+				if (num < 0 || eng < 0 || spe < 0) {
+					msg.data('messageBox').danger('경고', "영문,숫자, 특수문자를 혼합하여 입력해주세요.", 10, false);
+					return false;
+				}
+
+				if (andMark > -1) {
+					msg.data('messageBox').danger('경고', "특수문자중 [&]문자는 사용하실 수 없습니다.", 10, false);
+					return false;
+				}
+				return true;
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="col-sm-6 col-sm-offset-3">		
+			    <div class="py-5 text-center">
+					<h2>사용자 등록</h2>
+				  </div>
+				<form action="/userAdd" method="post" id="target">					
+					<!-- 인증 처리 후 메시지가 있으면 메시지 표시 -->
+					<% if (message.length > 0) { %>
+						<div class="alert alert-danger"><%= message %></div>
+					<% } %>
+
+					<div class="form-group">
+						<label>사원번호 : </label>
+						<input type="text" class="form-control" name="id" />
+					</div>
+					<div class="form-group">
+						<label>이름 : </label>
+						<input type="text" class="form-control" name="name" />
+					</div>
+					<div class="form-group">
+						<label>패스워드 : </label>
+						<input type="password" class="form-control" name="password" />
+					</div>
+					<div class="form-group">
+						<label>프로젝트 : </label>
+						<select id="project" class="form-control" name="depart" >							
+						</select>
+					</div>
+					<div>
+						<button type="button" id="userReg" class="btn btn-lg btn-primary btn-block">등록</button>
+
+						<% if (flag) { %>
+							<button type="button" id="goLogin" class="btn btn-lg btn-primary btn-block">로그인페이지 이동</button>
+						<% } %>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <title>근무관리시스템 관리자화면</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="js/jquery.messagebox.js"></script>
+
+    <script type="text/javascript">
+        var msg;
+        jQuery( document ).ready( function( $ ) {    
+            msg = $("body").messageBox({
+              modal:true,
+              autoClose: 0,
+              locale:{
+              NO : 'No',
+              YES : 'Yes',
+              CANCEL : 'Cancel',
+              OK : 'Okey',
+              textAutoClose: 'Auto close in %d seconds'
+              }
+            });
+              
+          $.ajax({
+                url: '/getWeekInfo',
+                type: 'POST',
+                data: {'year':'2021'},
+                success : function(data) {
+                  var today = new Date();  
+
+                  var year = today.getFullYear(); 
+                  var month = today.getMonth() + 1;  // 월
+                  var day = today.getDate();  // 요일
+
+                  if(month < 10){ 
+                    month = "0" + month; 
+                  } 
+                  if(day < 10){ 
+                    day = "0" + day; 
+                  } 
+                  
+                  var to_date = year + "" + month + "" + day;
+                  
+                  var _weekInfoList = "<option value='init'>주차선택</option>";
+                  for(var i=0; i< data.weekInfo.length; i++) {
+                    
+                     if((to_date*1 >= data.weekInfo[i].sdate*1) && (to_date*1 <= data.weekInfo[i].edate*1)){
+                      _weekInfoList += "<option value='" + data.weekInfo[i].sdate + "^" + data.weekInfo[i].edate +"' selected>" 
+                                     + to_date_format(data.weekInfo[i].sdate) + "~" + to_date_format(data.weekInfo[i].edate) + "</option>";
+
+                     }else{
+                      _weekInfoList += "<option value='" + data.weekInfo[i].sdate + "^" + data.weekInfo[i].edate +"'>" 
+                                     + to_date_format(data.weekInfo[i].sdate) + "~" + to_date_format(data.weekInfo[i].edate) + "</option>";
+
+                     }
+                  }
+                  $("#sel_weekInfo").html(_weekInfoList);
+                },
+                error : function() {				
+                  alert("주차 정보 리스트 취득 실패");
+                }
+            });
+
+            var _url;
+            if($("#role").val() == '1') {
+              _url = '/userAll'
+            }else{
+              _url = '/userFind'
+            }
+
+            $.ajax({
+                url: _url,
+                type: 'POST',
+                data: {id:$("#userId").val()},
+                success : function(data) {
+                  var _userList = "<option value='init'>사용자선택</option>";
+                  for(var i=0; i< data.userList.length; i++) {
+                    _userList += "<option value='" + data.userList[i].id + "'>" 
+                                     + data.userList[i].name + "</option>";
+                  }
+                  $("#sel_userList").html(_userList);
+                },
+                error : function() {				
+                  alert("사용자 정보 리스트 취득 실패");
+                }
+            });
+
+            $("#workSearch").click(function(){
+              var _workList = "";
+
+              if(!fn_validate()) {
+                return;
+              }
+
+              var selId = $("#sel_userList option:selected").val();
+              var selDt = $("#sel_weekInfo option:selected").val();
+
+              $.ajax({
+                  url: "/workInfoFind",
+                  type: 'POST',
+                  data: {'id':selId,'searchDate':selDt, kb:"0"},
+                  success : function(data) {
+
+                    if(data.workList.length > 0) {
+                      for(var i=0; i< data.workList.length; i++) {
+                        _workList += "<tr>";
+                        _workList += "<td>" 
+                                  + data.workList[i].workDate.substring(0,4)
+                                  +"년 "
+                                  + data.workList[i].workDate.substring(4,6) 
+                                  +"월 "
+                                  + data.workList[i].workDate.substring(6,8) 
+                                  +"일 "
+                                  + "</td>";
+                        _workList += "<td>" 
+                                  + data.workList[i].workTimeS.substring(8,10)
+                                  + "시 "
+                                  + data.workList[i].workTimeS.substring(10,12) 
+                                  + "분"
+                                  + "</td>";
+                        _workList += "<td>" 
+                                  + data.workList[i].workTimeE.substring(8,10)
+                                  + "시 "
+                                  + data.workList[i].workTimeE.substring(10,12) 
+                                  + "분"
+                                  + "</td>";                   
+
+                        _workList += "<td>" + data.workList[i].workOver + "분</td>";
+
+                        var _status = '처리완료';
+                        if(data.workList[i].status == '0') {_status = '승인대기';}
+                        _workList += "<td>" 
+                                  + _status
+                                  + "</td>";
+
+                        _workList += "<td  style='visibility:hidden;position:absolute;'>" + data.workList[i]._id + "</td>";
+                        _workList += "</tr>";
+                      }
+                    }else{
+                      _workList += "<tr>";
+                      _workList += "<td colspan='5'  style='text-align: center; vertical-align: middle;'>표시할 데이터가 존재하지 않습니다.</td>"
+                      _workList += "</tr>";
+                    }
+
+                    $("#workList").html(_workList);
+                    
+                    $("#workList tr").click(function(){  
+                      var tr = $(this);
+                      if(tr.find("td:eq(5)").text() == '') return;  
+                      //_id로 검색 (팝업실행)
+                      var url = "/popupWorkInfo?_id=" + tr.find("td:eq(5)").text()
+                                + "&name="+$("#sel_userList option:selected").text() 
+                                + "&kb=1";
+                      var name = "상세정보";
+                      var option = "width = 500, height = 670, top = 0, left = 300, location = no"
+                      window.open(url, name, option);
+                    });
+                  },
+                  error : function() {				
+                    alert("정보 취득 실패");
+                  }
+              });
+            });
+        });  
+
+        function to_date_format(date_str)
+        {
+            var yyyyMMdd = String(date_str);
+            var sYear = yyyyMMdd.substring(0,4);
+            var sMonth = yyyyMMdd.substring(4,6);
+            var sDate = yyyyMMdd.substring(6,8);
+
+            return sYear + '년 ' + sMonth + '월 ' + sDate + '일';
+        }
+
+        //정합성체크
+			function fn_validate() {
+
+            var index = $("#sel_weekInfo option").index($("#sel_weekInfo option:selected"));
+            if(index == 0) {
+              msg.data('messageBox').danger('경고', '주차를 선택하여 주시기 바랍니다. ', 10, false);
+              return false;
+            }
+
+            var index = $("#sel_userList option").index($("#sel_userList option:selected"));
+            if(index == 0) {
+              msg.data('messageBox').danger('경고', '사용자를 선택하여 주시기 바랍니다. ', 10, false);
+              return false;
+            }
+
+            return true;
+        }
+
+        function fnRefresh(){
+          $("#workSearch").click();
+        }
+    </script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">출퇴근관리시스템 관리자페이지</a>
+          <div class="navbar-brand">[ <%=projectNm %> ]</div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">로그아웃</a></li>
+          </ul>          
+        </div>
+      </div>
+    </nav>    
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="/workInfo">Overview</a></li>
+            <li class="active"><a href="#">상세정보관리<span class="sr-only">(current)</span></a></li>
+            <li><a href="/workVac">휴가신청</a></li>
+            <li><a href="#">기초코드등록</a></li>
+            <li><a href="/dataExport">Export</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">상세정보관리</h1>
+          <input type="hidden" id="role" name="role" value=<%= role %>>
+          <input type="hidden" id="userId" name="userId" value=<%= userId %>>
+          <div>
+            <div class="form-group" style="width:350px; float:left;">
+              <label>주차 : </label>
+              <select id="sel_weekInfo" class="form-control" name="selWeekInfo" style="width:300px;">							
+              </select>
+            </div>
+            
+            <div class="form-group" style="width:350px; float:left;">
+              <label>사용자 : </label>
+              <select id="sel_userList" class="form-control" name="selUserList" style="width:300px;">							
+              </select>
+            </div>
+
+            <div class="form-group" style="width:350px; float:left;">
+              <button type="button" id="workSearch" class="btn btn-lg btn-primary btn-block" style="width:100px; height:60px;">검색</button>
+            </div>
+          <div>          
+          <div class="table-responsive" style="display: block;"></div>
+            <table class="table table-striped"  style="text-align: center; vertical-align: middle;">
+              <thead>
+                <tr style="background-color: darkseagreen;">
+                  <th style="text-align: center; vertical-align: middle;">날짜</th>
+                  <th style="text-align: center; vertical-align: middle;">출근시간</th>
+                  <th style="text-align: center; vertical-align: middle;">퇴근시간</th>
+                  <th style="text-align: center; vertical-align: middle;">야근시간</th>
+                  <th style="text-align: center; vertical-align: middle;">처리상태</th>
+                  <th class='td_style' style="visibility:hidden;position:absolute;">_id</th>
+                </tr>
+              </thead>
+              <tbody id="workList">                          
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

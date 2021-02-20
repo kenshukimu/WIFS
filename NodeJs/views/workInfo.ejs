@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <title>근무관리시스템 관리자화면</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/jquery-confirm.css" rel="stylesheet">
+
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="js/jquery-confirm.js"></script>
+
+
+    <script type="text/javascript">
+        window.chartColors = {
+          red: 'rgb(255, 99, 132)',
+          orange: 'rgb(255, 159, 64)',
+          yellow: 'rgb(255, 205, 86)',
+          green: 'rgb(75, 192, 192)',
+          blue: 'rgb(54, 162, 235)',
+          purple: 'rgb(153, 102, 255)',
+          grey: 'rgb(201, 203, 207)'
+        };
+        var color = Chart.helpers.color;
+
+        jQuery( document ).ready( function( $ ) {
+
+          //차트표시
+          var ctx = document.getElementById('myChart');
+
+          var _uId;
+          if($("#role").val() != '1') {
+            _uId = $("#userId").val();            
+          }
+          $.ajax({
+                      url: "/userWithWorkListForChart",
+                      type: 'POST',
+                      dataType: "json",
+                      data: {id:_uId, status:"1"},
+                      success: function(response)
+                      {                          
+                          var myBarChart = new Chart(ctx, {
+                              type: 'bar',
+                              data: {
+                                  labels: response.data.labels,
+                                  datasets: [{
+                                      label: '총 연장근로 시간(분)',
+                                      data: response.data.chartData,
+                                      backgroundColor: [
+                                          window.chartColors.red,
+                                          window.chartColors.orange,
+                                          window.chartColors.yellow,
+                                          window.chartColors.green,
+                                          window.chartColors.blue,
+                                          window.chartColors.grey,
+                                          window.chartColors.pink
+                                      ],
+                                      borderWidth: 1
+                                  }]
+                              },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                      }
+              });
+
+          var _url;
+          if($("#role").val() == '1') {
+            _url = '/userAll'
+          }else{
+            _url = '/userFind'
+          }
+          
+          //사용자 리스트 표시
+          $.ajax({
+                url: _url,
+                type: 'POST',
+                data: {id:$("#userId").val()},
+                success : function(data) {
+                  var _userList = "";
+
+                  for(var i=0; i< data.userList.length; i++) {
+                      _userList += "<tr>";
+                      _userList += "<td  class='td_style'>" + data.userList[i].id + "</td>";
+                      _userList += "<td  class='td_style'>" + data.userList[i].name + "</td>";
+                      _userList += "<td  class='td_style'>" + data.userList[i].depart + "</td>";
+
+                      var _roleName;
+
+                      if(data.userList[i].role === undefined || data.userList[i].role == '0') {
+                        _roleName = '사용자';
+                      }else{
+                        _roleName = '관리자';
+                      }
+
+                      _userList += "<td  class='td_style'>" + _roleName + "</td>";
+                      _userList += "<td  style='visibility:hidden;position:absolute;'>" + data.userList[i]._id + "</td>";
+                      _userList += "</tr>";
+                  }
+
+                  $("#userList").html(_userList);
+            
+                  $("#userList tr").click(function(){  
+                    
+                    if($("#role").val() == '1') {
+                      var tr = $(this);
+                      $.confirm({
+                          title: '권한수정',
+                          content: '사용자의 권한을 수정하시겠습니까?',
+                          buttons: {
+                              confirm: function () {
+                                $.ajax({
+                                  url: '/userUpdate',
+                                  type: 'POST',
+                                  data: {'id' : tr.find("td:eq(0)").text(), 'role' : tr.find("td:eq(3)").text()},
+                                  success : function() {
+                                    location.href = "/workInfo";
+                                  }
+                                });
+                              },
+                              cancel: function () {
+                                  $.alert('취소');
+                              }
+                            }
+                        });
+                      }
+                  });
+                },
+                error : function() {				
+                  alert("사용자 정보 리스트 취득 실패");
+                }
+            });
+
+            //승인대기 테이블 작성
+            $.ajax({
+                url: "/userWithWorkList",
+                type: 'POST',
+                data: {id:_uId, status:"0"},
+                success : function(data) {                  
+                  var _approveList = "";
+
+                  for(var i=0; i< data.approveList.length; i++) {
+                    for(var j=0; j< data.approveList[i].workinfoList.length; j++) {
+                        _approveList += "<tr>";                       
+
+                        if(data.approveList[i].workinfoList[j].workOver > 0) {
+                          _approveList += "<td  class='td_style'>야근신청</td>";                         
+                        }else{
+                          _approveList += "<td  class='td_style'>휴가신청</td>";
+                        }
+
+                        _approveList += "<td  class='td_style'>" + data.approveList[i].name + "</td>";
+                        _approveList += "<td  class='td_style'>" +data.approveList[i].workinfoList[j].workOver + "분</td>";
+                        _approveList += "<td  class='td_style'>" 
+                                     +  data.approveList[i].workinfoList[j].workDate.substring(0,4)
+                                     +"년 "
+                                     +  data.approveList[i].workinfoList[j].workDate.substring(4,6) 
+                                     +"월 "
+                                     +  data.approveList[i].workinfoList[j].workDate.substring(6,8) 
+                                     +"일 "
+                                     + "</td>";
+                       
+                        _approveList += "<td  style='visibility:hidden;position:absolute;'>" + data.approveList[i].workinfoList[j]._id + "</td>";
+                        _approveList += "</tr>";
+                    }
+                  }
+                  
+
+                  $("#approveList").html(_approveList);
+            
+                  $("#approveList tr").click(function(){  
+                  });
+                },
+                error : function() {				
+                  alert("승인 정보 리스트 취득 실패");
+                }
+            });
+        });
+    </script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">출퇴근관리시스템 관리자페이지</a>
+          <div class="navbar-brand">[ <%=projectNm %> ]</div>
+        </div>
+        
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">로그아웃</a></li>
+          </ul>          
+        </div>
+      </div>
+    </nav>    
+    
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+            <li><a href="/workUsers">상세정보관리</a></li>
+            <li><a href="/workVac">휴가신청</a></li>
+            <li><a href="#">기초코드등록</a></li>
+            <li><a href="/dataExport">Export</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Dashboard</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-4 placeholder">
+             <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+            <!--
+            <div class="col-xs-6 col-sm-4 placeholder">
+              <h2 class="sub-header">공지사항</h2>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class='td_style' width="500px">공지내용</th>
+                    <th class='td_style' width="200px">작성자</th>
+                    <th class='td_style' width="200px">작성일</th>
+                    <th style="visibility:hidden;position:absolute;">_id</th>
+                  </tr>
+                </thead>
+                <tbody>                          
+                </tbody>
+              </table>
+            </div>
+          -->
+            <div class="col-xs-6 col-sm-4 placeholder" style='width:500px'>
+              <h2 class="sub-header">승인요청</h2>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class='td_style' width="200px">구분</th>
+                    <th class='td_style' width="200px">요청자</th>
+                    <th class='td_style' width="200px">야근시간</th>
+                    <th class='td_style' width="300px">요청일자</th>
+                    <th style="visibility:hidden;position:absolute;">_id</th>
+                  </tr>
+                </thead>
+                <tbody id="approveList">                          
+                </tbody>
+              </table>
+              <!--
+              <canvas id="notice" width="400" height="400"></canvas>
+              -->
+            </div>
+          </div>
+          <input type="hidden" id="role" name="role" value=<%= role %>>
+          <input type="hidden" id="userId" name="userId" value=<%= userId %>>
+          
+          <h2 class="sub-header">사용자정보</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th class='td_style' width="300px">사원번호</th>
+                  <th class='td_style' width="300px">성명</th>
+                  <th class='td_style' width="300px">소속</th>
+                  <th  class='td_style'width="250px">관리자 권한</th>
+                  <th class='td_style' style="visibility:hidden;position:absolute;width: 10px;">_id</th>
+                </tr>
+              </thead>
+              <tbody id="userList">                          
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

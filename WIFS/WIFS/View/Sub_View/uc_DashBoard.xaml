@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="WIFS.View.Sub_View.uc_DashBoard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:WIFS"
+            xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+            xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+            xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+            xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+            mc:Ignorable="d"
+            d:DesignHeight="350" d:DesignWidth="580" Background="#2E3349">
+    <Grid Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="105"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+            <Label Content="Dashboard" Foreground="#9EA1B0" FontSize="21" 
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Microsoft Sans Serif"/>
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" >
+            
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" Background="#FF181E36" BorderBrush="#007EF6" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0"  VerticalAlignment="Top" >
+                    <Label Content="▷ 전체 야근 적립시간" Foreground="Wheat"
+                           FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0"  VerticalAlignment="Top" >
+                    <Label x:Name="lb_totalOverTime" Content="00시간00분" Foreground="#007EF6" Margin="25,5,0,0"
+                           FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <iconPacks:PackIconRadixIcons Kind="LapTimer" Width="Auto" Height="Auto" Margin="20,20,20,20" Foreground="#FF9097E4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="2" Background="#FF181E36" BorderBrush="#007EF6" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0"  VerticalAlignment="Top" >
+                    <Label Content="▷ 금주 야근가능 시간" Foreground="Wheat"
+                           FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0"  VerticalAlignment="Top" >
+                    <Label x:Name="leftOverTime" Content="00시간00분" Foreground="#007EF6" Margin="25,5,0,0"
+                           FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <iconPacks:PackIconMaterialDesign Kind="AvTimer" Width="Auto" Height="Auto" Margin="20,20,20,20" Foreground="#FF9097E4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid Width="550">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0">
+                    <Label Content="◀" Foreground="#007EF6" 
+                           FontSize="13" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="preData" MouseLeftButtonDown="PreData_MouseLeftButtonDown"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0">
+                            <Label x:Name= "sDate" Visibility="Collapsed"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1">
+                            <Label x:Name= "eDate" Visibility="Collapsed"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2" Margin="0,0,82,0">
+                            <Label x:Name= "lb_week" Content="1월 1째주 (1월1일~1월2일)" Foreground="#007EF6"
+                           FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="2" >
+                    <Label Content="▶" Foreground="#007EF6" 
+                           FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="nextData" MouseLeftButtonDown="PreData_MouseLeftButtonDown"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" >
+            <lvc:Gauge Grid.Row="2" Grid.Column="1"
+                   From="0" To="100" Value="90"
+                   LabelsVisibility="Collapsed"
+                   Foreground="White" x:Name="workChart">
+                <lvc:Gauge.GaugeActiveFill>
+                    <LinearGradientBrush>
+                        <GradientStop Color="Yellow" Offset="0.0" />
+                        <GradientStop Color="Orange" Offset="0.5" />
+                        <GradientStop Color="Red" Offset="1.0" />
+                    </LinearGradientBrush>
+                </lvc:Gauge.GaugeActiveFill>
+            </lvc:Gauge>
+        </Border>
+        
+        <Border Grid.Row="4" Grid.Column="2">
+            <Label Content="권장근무시간 : 40시간(최대 52시간)" Foreground="White" Margin="25,5,0,0"
+                           FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <Border Grid.Row="4" Grid.Column="0">
+            <Label x:Name="lb_workTime" Content="누적근무시간 : 35시간" Foreground="White" Margin="25,5,0,0"
+                           FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>

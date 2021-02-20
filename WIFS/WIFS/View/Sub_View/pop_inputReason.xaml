@@ -1,0 +1,23 @@
+﻿<mah:MetroWindow x:Class="WIFS.View.Sub_View.pop_inputReason"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WIFS.View.Sub_View"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="야근이유입력" Height="193.538" Width="333.792" ShowMinButton="False" ShowMaxRestoreButton="False" Closed="MetroWindow_Closed">
+    <Grid Background="#FF181E36">
+        <TextBox Margin="10,10,10,46" x:Name="txtOverTimeReason"/>
+        <Button Width="85"
+            Content="등록"
+            FontSize="16"
+            Margin="231,122,10,10"
+            Style="{DynamicResource MahApps.Styles.Button.Square}" 
+            HorizontalAlignment="center"
+            Background="#9EA1B0"
+            x:Name="btn_overTimeReasonReg" Click="Btn_overTimeReasonReg_Click"/>
+
+    </Grid>
+</mah:MetroWindow>

@@ -1,0 +1,116 @@
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+ . ~/.nvm/nvm.sh
+ node -e "console.log('Running Node.js ' + process.version)"
+npm install
+
+1. 포트확인
+
+netstat -nap | grep 3000
+
+
+
+2. 포트죽이기
+
+fuser -k -n tcp 3000
+
+
+
+
+systemctl restart mongod
+
+systemctl restart mongod.service
+
+ps -Aef | grep 27017
+ 
+또는
+
+ps -Aef | grep mongod
+ 
+프로세스 ID를 찾아서 종료
+
+sudo kill -9 <processId>
+ 
+그런 다음 다시 시작하십시오 :
+
+systemctl restart mongod
+ 
+또는 :
+
+/etc/init.d/mongodb restart
+
+
+yum으로 설치된 mongodb 삭제
+31 Jul 2018 mongodb
+
+1. 사용중인 몽고 정지
+sudo service mongod stop
+
+2. 패키지 삭제
+sudo yum erase $(rpm -qa	grep mongodb-org)
+3. 기타 데이터 삭제
+sudo rm -r /var/log/mongodb sudo rm -r /var/lib/mongo
+
+
+//restart 에러일경우
+rm -rf /tmp/mongodb-27017.sock) and finished the installation:
+
+
+
+
+MONGODB 설치
+yum install -y mongodb-org
+
+
+ssh로 서버에 접속합니다. Amazon Linux AMI의 user는 항상 ec2-user입니다.
+
+sudo su를 입력해 root권한으로 변경합니다.
+
+vi /etc/yum.repos.d/mongodb-org-4.0.repo 입력 후 아래 내용으로 저장합니다.
+
+[mongodb-org-4.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/4.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.0.asc
+yum install -y mongodb-org
+설치가 완료되면 다음 명령을 입력합니다.
+
+service mongod start
+
+
+
+MongoDB 계정 생성
+mongo를 입력해 MongoDB에 접속합니다.
+
+use admin
+db.createUser({ user: "사용자 계정",
+  pwd: "패스워드",
+  roles: [ "userAdminAnyDatabase",
+    "dbAdminAnyDatabase",
+    "readWriteAnyDatabase"
+  ]
+})
+위 명령을 입력해서 관리자 계정을 생성합니다.
+
+use customDB
+db.createUser({ user: "계정",
+  pwd: "패스워드",
+  roles: ["dbAdmin", "readWrite"]
+})
+위 명령을 입력해서 DB의 계정을 생성합니다.
+
+MongoDB 보안 설정
+vi /etc/mongod.conf를 입력해 MongoDB 설정을 수정합니다.
+
+# network interfaces
+net:
+  port: 27017
+  #bindIp: 127.0.0.1
+bindIp를 주석처리하면 bindIp에 나열된 ip가 아니더라도 MongoDB에 접근할 수 있습니다. 우리는 EC2 Security Group에서 접근을 제어하기 때문에 bindIp옵션을 주석처리합니다.
+
+security:
+    authorization: enabled
+같은 파일의 security 옵션을 주석해제하고, authorization: enabled옵션을 추가합니다. 이 옵션을 설정하면 MongoDB에 익명으로 로그인할 수 없습니다.
+
+이제 service mongod restart를 입력해 변경 사항을 적용합니다.

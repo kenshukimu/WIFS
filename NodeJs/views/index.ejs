@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>로그인 화면</title>
+		
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		
+    	<style>
+        	body        { padding-top:80px; }
+		</style>
+		
+		<script src="http://code.jquery.com/jquery.min.js"></script>
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="js/jquery.messagebox.js"></script>
+		<script type="text/javascript">
+			
+			$( document ).ready(function() {
+
+				var msg = $("body").messageBox({
+					modal:true,
+					autoClose: 0,
+					locale:{
+					NO : 'No',
+					YES : 'Yes',
+					CANCEL : 'Cancel',
+					OK : 'Okey',
+					textAutoClose: 'Auto close in %d seconds'
+					}
+				});
+
+				$("#login").click(function(){
+					var _id = $('input[name=id]').val();					
+					if(_id.length < 1) {
+						msg.data('messageBox').danger('경고', '아이디를 입력하여 주시기 바랍니다. ', 10, false);
+						return false;
+					}
+
+					var _id = $('input[name=password]').val();					
+					if(_id.length < 1) {
+						msg.data('messageBox').danger('경고', '패스워드를 입력하여 주시기 바랍니다. ', 10, false);
+						return false;
+					}
+
+					$('#target').submit();
+				});
+
+				$("#userReg").click(function(){
+					location.href = "/userReg";
+				});
+			});
+		</script>
+    
+	</head>
+	<body>
+		<div class="container">
+
+			<div class="col-sm-6 col-sm-offset-3">
+		
+			    <h1><span class="fa fa-sign-in"></span> 로그인</h1>
+			
+			    <!-- 인증 처리 후 메시지가 있으면 메시지 표시 -->
+			    <% if (message.length > 0) { %>
+			        <div class="alert alert-danger"><%= message %></div>
+			    <% } %>
+			
+			    <form action="/login" method="post" id="target" >
+			        <div class="form-group">
+			            <label>사원번호</label>
+			            <input type="text" class="form-control" name="id">
+			        </div>
+			        <div class="form-group">
+			            <label>비밀번호</label>
+			            <input type="password" class="form-control" name="password">
+					</div>
+					
+					<button type="button" id="login" class="btn btn-lg btn-primary btn-block">로그인</button>
+					<button type="button" id="userReg" class="btn btn-lg btn-primary btn-block">회원가입</button>
+					
+			    </form>
+			</div>
+		
+		</div>
+
+	</body>
+</html>

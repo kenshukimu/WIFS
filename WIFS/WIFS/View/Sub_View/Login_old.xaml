@@ -1,0 +1,81 @@
+﻿<mah:MetroWindow x:Class="WIFS.View.Sub_View.Login_old"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 Title="로그인"
+                 Width="600"
+                 Height="800"
+                 WindowStartupLocation="CenterScreen"
+                 mc:Ignorable="d" IsMinButtonEnabled="False" IsMaxRestoreButtonEnabled="False" KeepBorderOnMaximize="False" IsWindowDraggable="False" ShowMaxRestoreButton="False" ShowDialogsOverTitleBar="False" ShowIconOnTitleBar="False" ShowMinButton="False" ShowSystemMenu="False" ShowSystemMenuOnRightClick="False" ShowTitleBar="False" Closed="MetroWindow_Closed">
+    <Grid Background="#2E3349">
+        <StackPanel Margin="0,0,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="8*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Grid.ColumnSpan="2" x:Name="errorArea">
+                    <Label x:Name="errorMessage"  Background="LightCyan" FontFamily="Microsoft Sans Serif" 
+                           FontSize="20" FontWeight="ExtraBold"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <iconPacks:PackIconCodicons Kind="Account" Width="Auto" Height="Auto" Margin="6" Padding="2"  />
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <TextBox Margin="10,10,10,10"
+                             mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+                             ContextMenu="{x:Null}"
+                             FontSize="30"
+                             x:Name="Txt_UserId"
+                             Text="">
+                        <TextBox.Style>
+                            <Style BasedOn="{StaticResource MahApps.Styles.TextBox}" TargetType="{x:Type TextBox}">
+                                <Setter Property="mah:TextBoxHelper.ClearTextButton" Value="True" />
+                                <Style.Triggers>
+                                    <Trigger Property="mah:TextBoxHelper.HasText" Value="False">
+                                        <Setter Property="mah:TextBoxHelper.ClearTextButton" Value="False" />
+                                        <Setter Property="mah:TextBoxHelper.Watermark" Value="사원번호" />
+                                    </Trigger>
+                                    <Trigger Property="mah:TextBoxHelper.HasText" Value="True">
+                                        <Setter Property="mah:TextBoxHelper.ClearTextButton" Value="True" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                    <iconPacks:PackIconTypicons Kind="KeyOutline" Width="Auto" Height="Auto" Margin="6" Padding="2"  />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <PasswordBox Margin="10,10,10,10"
+                             mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             mah:TextBoxHelper.UseFloatingWatermark="True"
+                             mah:TextBoxHelper.Watermark="패스워드"                             
+                             FontSize="30"
+                             x:Name="Txt_UserPass"/>
+                </Grid>
+                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                    <!--<ToggleButton Width="200" Content="로그인" />-->
+                    <Button Padding="3" Width="100" Margin="118,10,117,-11" x:Name="Btn_Login" Click="BtnLogin_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconOcticons Width="Auto" Height="Auto" Kind="Clippy"/>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </Grid>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

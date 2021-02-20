@@ -1,0 +1,108 @@
+﻿<mah:MetroWindow x:Class="WIFS.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:WIFS"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    mc:Ignorable="d"
+    Title="출근관리시스템" 
+    Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" 
+    x:Name="MainForm">
+    <Grid>
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="10" Direction="180" Opacity="0.45" />
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" x:Name="grdClmn_menu"/>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="314*"/>
+            <ColumnDefinition Width="44*"/>
+            <ColumnDefinition Width="181*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Background="#FF181E36"  Grid.Column="0" Grid.Row="0" x:Name="brd_main">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0">
+                    <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <!--<Image Source="" Height="24" Width="35" Margin="0,6,0,5" x:Name="btn_slide" MouseDown="Btn_slide_MouseDown"/>-->
+                        <iconPacks:PackIconBootstrapIcons Kind="Alarm" Width="Auto" Height="Auto" Margin="5,5,5,5" Foreground="#FF9097E4"/>
+                        <Label Content="근태 관리 시스템" x:Name="lbl_logo" FontWeight="Bold" VerticalContentAlignment="Center" FontSize="18"
+                               HorizontalContentAlignment="Center" Height="50" OpacityMask="Black" Background="Transparent" FontFamily="Microsoft Sans Serif" 
+                               Foreground="White">
+                        </Label>
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="1">
+                    <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Content="User Name" x:Name="lbl_userInfo" FontWeight="Bold" VerticalContentAlignment="Center" FontSize="18"
+                               HorizontalContentAlignment="Center" Height="50" OpacityMask="Black" Background="Transparent" FontFamily="Microsoft Sans Serif" 
+                               Foreground="#007EF6">
+                        </Label>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- sidemenu -->
+        <Border Background="#FF181E36" Grid.Column="0" Grid.Row="2">
+            <StackPanel HorizontalAlignment="Left">
+                <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_DashBoard" ToolTip="정보메인화면" Click="Btn_DashBoard_Click">
+                    <DockPanel Width="220" Margin="15,0,0,0">
+                        <Label Content="DashBoard" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <iconPacks:PackIconMaterial Kind="MonitorDashboard" Width="Auto" Height="Auto" Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Button>
+                <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_DataInput" ToolTip="출근엽력" Click="Btn_DataInput_Click">
+                    <DockPanel Width="220" Margin="15,0,0,0">
+                        <Label Content="출 근 입 력" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <iconPacks:PackIconVaadinIcons Kind="TextInput" Width="Auto" Height="Auto"  Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Button>
+                <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_vacationInput" ToolTip="휴가입력" Click="Btn_vacationInput_Click">
+                    <DockPanel Width="220" Margin="15,0,0,0">
+                        <Label Content="휴 가 입 력" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <iconPacks:PackIconMaterial Kind="Airport" Width="Auto" Height="Auto" Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Button>
+                <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_Setting" ToolTip="셋팅" Click="Btn_Setting_Click">
+                    <DockPanel Width="220" Margin="15,0,0,0">
+                        <Label Content="환 경 설 정" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <iconPacks:PackIconIonicons Kind="HammerMD" Width="Auto" Height="Auto" Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Button>
+
+                <Canvas>
+                    <Border Canvas.Left="10" Canvas.Top="5" CornerRadius="10,10,10,10" Width="200">
+                        <StackPanel>
+                            <Label x:Name="labDate" FontSize="16" Content="0000년00월00일" Foreground="White" Width="200" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"></Label>
+                            <Label x:Name="labTime" FontSize="16"  Content="00시00분00초" Foreground="White" Width="200" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"></Label>
+                            <Label x:Name="version" FontSize="16" Content="" Foreground="White" Width="200" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Canvas>
+            </StackPanel>
+        </Border>
+
+        <!-- Contents -->
+        <Border Grid.Column="1" Grid.Row="0" Background="#FFC3CBDA" Grid.RowSpan="3" Grid.ColumnSpan="4">
+            <Grid x:Name="Contents_Border">
+
+            </Grid>
+        </Border>
+        <Label Content="Label"  HorizontalAlignment="Left" Margin="76,0,0,0" VerticalAlignment="Top" Width="141" x:Name="moveTime" Opacity="0" />
+    </Grid>
+</mah:MetroWindow>
