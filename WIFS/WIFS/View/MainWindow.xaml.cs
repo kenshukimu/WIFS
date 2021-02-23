@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using ToastNotifications.Core;
+using WIFS.Model;
 using WIFS.Util;
 using WIFS.View.Sub_View;
 
@@ -27,6 +29,8 @@ namespace WIFS
         uc_Setting _uc_sessing = null;
         uc_VacationInput _uc_vacationInput = null;
 
+        private readonly ToastViewModel _vm;
+
         public System.Windows.Forms.NotifyIcon notify;
 
         private int _moveFg = 0;
@@ -34,6 +38,9 @@ namespace WIFS
         public MainWindow()
         {
             InitializeComponent();
+
+            _vm = new ToastViewModel("0");
+            Unloaded += OnUnload;
 
             string strVersionText = Assembly.GetExecutingAssembly().FullName
             .Split(',')[1]
@@ -49,6 +56,12 @@ namespace WIFS
             //전에 처리하지 않은 데이터 확인
             checkData();
         }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+            _vm.OnUnloaded();
+        }
+
 
         //타이머 처리
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -67,7 +80,8 @@ namespace WIFS
             labTime.Content = _strTime;
 
             //09시가 되었는데 근무가 처리 안되었을 경우 (월~금)        
-            //20초동안 클릭을 안할 경우 출근안함으로 처리
+            //60초동안 클릭을 안할 경우 출근안함으로 처리
+            //cf.status => 1: 근무 , 0:퇴근
             if (!(DateTime.Now.DayOfWeek.Equals(DayOfWeek.Saturday) && DateTime.Now.DayOfWeek.Equals(DayOfWeek.Sunday)))
             {
                 if (DateTime.Now.ToString("HHmmss").Equals("090000")
@@ -76,31 +90,34 @@ namespace WIFS
                     var result = System.Windows.Forms.AutoClosingMessageBox.Show(
                                 text: "9시입니다. 근무를 시작하시겠습니까?",
                                 caption: "근무설정",
-                                timeout: 20000,
+                                timeout: 60000,
                                 buttons: System.Windows.Forms.MessageBoxButtons.YesNo,
                                 defaultResult: System.Windows.Forms.DialogResult.No);
-                                if (result == System.Windows.Forms.DialogResult.Yes)
-                                {
-                                    //기본파일 등록처리
-                                    string[] param = new string[2];
-                                    param[0] = DateTime.Now.ToString("yyyyMMdd") + "090000";
-                                    param[1] = string.Empty;
-                                    cf.workStartLastTime = param[0];
-                                    cf.workEndLastTime = "";
+                    if (result == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        //기본파일 등록처리
+                        string[] param = new string[2];
+                        param[0] = DateTime.Now.ToString("yyyyMMdd") + "090000";
+                        param[1] = string.Empty;
+                        cf.workStartLastTime = param[0];
+                        cf.workEndLastTime = "";
 
-                                    cf.workStatus = "1";
+                        cf.workStatus = "1";
 
-                                    InitSetting.ConfigWriteProfile(param, 1);
-                                }
+                        InitSetting.ConfigWriteProfile(param, 1);
+
+                        _uc_dashboard = new uc_DashBoard();
+                        uc_Class.Uc_Link(Contents_Border, _uc_dashboard);
+                        }
                 }
                 //18시가 되었을 때 퇴근알림 처리
-                if (DateTime.Now.ToString("HHmmss").Equals("180000")
+                else if (DateTime.Now.ToString("HHmmss").Equals("180000")
                            && cf.workStatus.Equals("1"))
                 {
                     var result = System.Windows.Forms.AutoClosingMessageBox.Show(
                                 text: "18시입니다. 퇴근 하시겠습니까?",
                                 caption: "근무설정",
-                                timeout: 20000,
+                                timeout: 60000,
                                 buttons: System.Windows.Forms.MessageBoxButtons.YesNo,
                                 defaultResult: System.Windows.Forms.DialogResult.No);
                     if (result == System.Windows.Forms.DialogResult.Yes)
@@ -125,6 +142,18 @@ namespace WIFS
 
                         //데이터베이스 등록처리
                         regWorkData(workDate, _sDateTime, _eDateTime, sTime, eTime);
+                    }
+                }
+                else if (DateTime.Now.ToString("HHmmss").Equals("093000") || DateTime.Now.ToString("HHmmss").Equals("133000")
+                       && cf.workStatus.Equals("1"))
+                {
+                    _vm.ShowInformation("오전 9시30분에서 11시30분 / 오후 13시30분 ~ 오후 17시30분은 업무 집중시간입니다.");
+                }
+
+                if(cf.workStatus.Equals("1") && Int32.Parse(DateTime.Now.ToString("HHmmss")) > 183000)
+                {
+                    if(DateTime.Now.ToString("mmss").Equals("0000")) {
+                        _vm.ShowInformation("현재 연장근무중입니다. 업무 빨리 하시고 퇴근하세요.");
                     }
                 }
             }
@@ -194,7 +223,7 @@ namespace WIFS
         }
 
         private void Btn_DataInput_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             _uc_workInput = new uc_WorkInput();
             uc_Class.Uc_Link(Contents_Border, _uc_workInput);
         }

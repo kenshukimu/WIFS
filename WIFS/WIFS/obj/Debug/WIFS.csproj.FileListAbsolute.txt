@@ -290,3 +290,5 @@ D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.c
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.csproj.CopyComplete
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.exe
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.pdb
+D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\ToastNotifications.dll
+D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\ToastNotifications.Messages.dll

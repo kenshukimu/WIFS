@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WIFS.Model;
 using WIFS.Util;
 
 namespace WIFS.View.Sub_View
@@ -15,10 +16,14 @@ namespace WIFS.View.Sub_View
     public partial class uc_DashBoard : UserControl
     {
         ClientConfig cf = InitSetting.CConf;
+        private readonly ToastViewModel _vm;
 
         public uc_DashBoard()
         {
             InitializeComponent();
+
+            _vm = new ToastViewModel("1");
+            Unloaded += OnUnload;
 
             String[] weekinfo = new CommonUtil().getWeekInfo(DateTime.Now.ToString("yyyyMMdd"));
             lb_week.Content = weekinfo[0];
@@ -44,7 +49,8 @@ namespace WIFS.View.Sub_View
             {
                 if(sDate.Content.ToString().Substring(4,4).Equals("0101"))
                 {
-                    MessageBox.Show("전년도로 이동은 불가합니다.");
+                    //MessageBox.Show("전년도로 이동은 불가합니다.");
+                    _vm.ShowError("전년도로 이동은 불가합니다.");
                     tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
                 }
                 else
@@ -55,7 +61,8 @@ namespace WIFS.View.Sub_View
             {
                 if (eDate.Content.ToString().Substring(4, 4).Equals("1231"))
                 {
-                    MessageBox.Show("내년도로 이동은 불가합니다.");
+                    //MessageBox.Show("내년도로 이동은 불가합니다.");
+                    _vm.ShowError("내년도로 이동은 불가합니다.");
                     tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
                 }
                 else
@@ -129,8 +136,14 @@ namespace WIFS.View.Sub_View
             }
             catch
             {
-                MessageBox.Show("관리자에게 문의 부탁드립니다.");
+                //MessageBox.Show("관리자에게 문의 부탁드립니다.");
+                _vm.ShowError("관리자에게 문의 부탁드립니다.");
             }
+        }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+            _vm.OnUnloaded();
         }
     }
 }

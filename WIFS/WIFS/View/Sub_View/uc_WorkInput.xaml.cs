@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using WIFS.Model;
 using WIFS.Util;
 
 namespace WIFS.View.Sub_View
@@ -30,10 +31,15 @@ namespace WIFS.View.Sub_View
         }
 
         ClientConfig cf = InitSetting.CConf;
+        private readonly ToastViewModel _vm;
 
         public uc_WorkInput()
         {
             InitializeComponent();
+
+            _vm = new ToastViewModel("1");
+            Unloaded += OnUnload;
+
             if (cf.workStatus != null && cf.workStatus.Equals("1"))
             {
                 txt_status.Content = "근무";
@@ -72,7 +78,9 @@ namespace WIFS.View.Sub_View
             {
                 if (sDate.Content.ToString().Substring(4, 4).Equals("0101"))
                 {
-                    MessageBox.Show("전년도로 이동은 불가합니다.");
+                    //MessageBox.Show("전년도로 이동은 불가합니다.");
+                    _vm.ShowError("전년도로 이동은 불가합니다.");
+
                     tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
                 }
                 else
@@ -84,7 +92,8 @@ namespace WIFS.View.Sub_View
             {
                 if (eDate.Content.ToString().Substring(4, 4).Equals("1231"))
                 {
-                    MessageBox.Show("내년도로 이동은 불가합니다.");
+                    //MessageBox.Show("내년도로 이동은 불가합니다.");
+                    _vm.ShowError("내년도로 이동은 불가합니다.");
                     tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
                 }
                 else
@@ -198,9 +207,16 @@ namespace WIFS.View.Sub_View
         }
 
         private void Btn_workTimeReg_Click(object sender, RoutedEventArgs e)
-        {            
+        {   
             System.DateTime? sdt = sDateTime.SelectedDateTime;
             System.DateTime? edt = eDateTime.SelectedDateTime;
+
+            if (sdt == null || edt == null)
+            {
+                //MessageBox.Show("날짜가 입력되지 않았습니다.");
+                _vm.ShowError("날짜가 입력되지 않았습니다.");
+                return;
+            }
 
             String workDate = sdt?.ToString("yyyyMMdd");
 
@@ -208,26 +224,22 @@ namespace WIFS.View.Sub_View
             String _eDateTime = edt?.ToString("yyyyMMdd") + edt?.TimeOfDay.ToString().Replace(":", "");
 
             int sTime = Int32.Parse(sdt?.TimeOfDay.ToString().Replace(":", ""));
-            int eTime = Int32.Parse(edt?.TimeOfDay.ToString().Replace(":", ""));
-
-            if (sdt == null || edt == null)
-            {
-                MessageBox.Show("날짜가 입력되지 않았습니다.");
-                return;
-            }
+            int eTime = Int32.Parse(edt?.TimeOfDay.ToString().Replace(":", ""));            
             
             //등록시간 체크
             if (!(sdt?.ToString("yyyyMMdd")).Equals(edt?.ToString("yyyyMMdd")) 
                 &&                 
                     eTime != 0                
                 ) {
-                MessageBox.Show("동일한 날짜만 넣을 수 있습니다.");
+                //MessageBox.Show("동일한 날짜만 넣을 수 있습니다.");
+                _vm.ShowError("동일한 날짜만 넣을 수 있습니다.");
                 return;
             }
          
             if (double.Parse(_sDateTime) >= double.Parse(_eDateTime))
             {
-                MessageBox.Show("출근시간이 퇴근시간보다 클 수 없습니다.");
+                //MessageBox.Show("출근시간이 퇴근시간보다 클 수 없습니다.");
+                _vm.ShowError("출근시간이 퇴근시간보다 클 수 없습니다.");
                 return;
             }
             //데이터베이스 등록처리
@@ -313,8 +325,26 @@ namespace WIFS.View.Sub_View
                 int spanMinute = (int)TS.TotalMinutes - _dinnerTime - _lunchTime;
                 we.workHour = spanMinute;
 
-                //야근시간
+                /*
+                 * 야근시간계산법
+                 * 야근시간(기본 8시간 근무시)
+                 * 18시 이후에 근무하는 것은 기본적으로 야근으로 처리
+                 * 주말이나 휴일 근무일 경우 모드 연장근무로 처리
+                 */
+
                 int overTime = spanMinute - 480;
+                if (sTime >= 180000)
+                {
+                    overTime = spanMinute;
+                }
+
+                var _day = CDateTime.GetDayOfWeekHangul(workStart);
+
+                if ((bool)cheDinner.IsChecked || _day.Equals("토") || _day.Equals("일"))
+                {
+                    overTime = spanMinute;
+                }
+
                 we.workOver = overTime <= 0 ? 0 : overTime;
 
                 //오버타임인데 이유가 없을 경우
@@ -458,6 +488,21 @@ namespace WIFS.View.Sub_View
                 WorkDataGrid.ItemsSource = dt.DefaultView;
             }
             catch {}
+        }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+            _vm.OnUnloaded();
+        }
+
+        private void CheHoly_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.ShowWarning("휴일의 경우 근무시간이 모두 연장근무로 처리됩니다.");
+        }
+
+        private void CheDinner_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.ShowWarning("저녁식사시간 제외시 1시간을 근무시간으로 처리 합니다.(기본 저녁식사시간 추가)");
         }
     }
 }

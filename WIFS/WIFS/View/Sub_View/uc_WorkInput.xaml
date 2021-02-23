@@ -127,9 +127,16 @@
                     x:Name="btn_workTimeReg" Click="Btn_workTimeReg_Click"/>
                 </Border>
                 <Border Grid.Row="2" Grid.Column="1" Background="Wheat">
-                    <CheckBox x:Name="cheDinner" Foreground="#FFF9F8F5"  Margin="10,0,0,0"
-                               Canvas.Left="20" Canvas.Top="10" Content="저녁제외"  
-                               FontFamily="Georgia" FontSize="16" FontWeight="Bold" />
+                    <StackPanel>
+                        <CheckBox x:Name="cheDinner" Foreground="#FFF9F8F5"  Margin="10,2,0,0"
+                                   Canvas.Left="20" Canvas.Top="10" Content="저녁제외"  
+                                   FontFamily="Georgia" FontSize="16" FontWeight="Bold" 
+                                   Checked="CheDinner_Checked"/>
+                        <CheckBox x:Name="cheHoly" Foreground="#FFF9F8F5"  Margin="10,3,0,0"
+                                   Canvas.Left="20" Canvas.Top="10" Content="휴일근무"  
+                                   FontFamily="Georgia" FontSize="16" FontWeight="Bold"
+                                   Checked="CheHoly_Checked"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Border>

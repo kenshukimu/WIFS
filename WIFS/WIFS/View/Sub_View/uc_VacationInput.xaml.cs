@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using WIFS.Model;
 using WIFS.Util;
 
 namespace WIFS.View.Sub_View
@@ -29,10 +30,14 @@ namespace WIFS.View.Sub_View
         }
 
         ClientConfig cf = InitSetting.CConf;
+        private readonly ToastViewModel _vm;
 
         public uc_VacationInput()
         {
             InitializeComponent();
+
+            _vm = new ToastViewModel("1");
+            Unloaded += OnUnload;
 
             DataTable dataTable = new DataTable();
 
@@ -69,7 +74,8 @@ namespace WIFS.View.Sub_View
 
             if (workDate.Text.Equals(""))
             {
-                MessageBox.Show("일자를 입력하여 주시기 바랍니다.");
+                //MessageBox.Show("일자를 입력하여 주시기 바랍니다.");
+                _vm.ShowError("일자를 입력하여 주시기 바랍니다.");
                 workDate.Focus();
                 return;
             }
@@ -80,7 +86,8 @@ namespace WIFS.View.Sub_View
 
             if (vacationReason.Text.Equals(""))
             {
-                MessageBox.Show("휴가사유를 입력하여 주시기 바랍니다.");
+                //MessageBox.Show("휴가사유를 입력하여 주시기 바랍니다.");
+                _vm.ShowError("휴가사유를 입력하여 주시기 바랍니다.");
                 vacationReason.Focus();
                 return;
             }
@@ -94,7 +101,8 @@ namespace WIFS.View.Sub_View
 
                 if (sdt == null || edt == null)
                 {
-                    MessageBox.Show("시간이 입력되지 않았습니다.");
+                    //MessageBox.Show("시간이 입력되지 않았습니다.");
+                    _vm.ShowError("시간이 입력되지 않았습니다.");
                     return;
                 }
 
@@ -122,7 +130,8 @@ namespace WIFS.View.Sub_View
 
             if(Int32.Parse(_leftTimeCheck.Content.ToString()) < spanMinute)
             {
-                MessageBox.Show("야근 총 시간보다 더 많은 시간을 입력할 수 없습니다.");
+                //MessageBox.Show("야근 총 시간보다 더 많은 시간을 입력할 수 없습니다.");
+                _vm.ShowError("야근 총 시간보다 더 많은 시간을 입력할 수 없습니다.");
                 return;
             }
 
@@ -300,6 +309,11 @@ namespace WIFS.View.Sub_View
                 WorkDataGrid.ItemsSource = dt.DefaultView;
             }
             catch { }
+        }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+            _vm.OnUnloaded();
         }
     }
 }
