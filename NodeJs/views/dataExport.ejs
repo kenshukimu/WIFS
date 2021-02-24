@@ -18,26 +18,70 @@
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="js/jquery.messagebox.js"></script>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script type="text/javascript">
         var msg;
         jQuery( document ).ready( function( $ ) {    
-            msg = $("body").messageBox({
-              modal:true,
-              autoClose: 0,
-              locale:{
-              NO : 'No',
-              YES : 'Yes',
-              CANCEL : 'Cancel',
-              OK : 'Okey',
-              textAutoClose: 'Auto close in %d seconds'
-              }
+          $( "#startDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+          $( "#endDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+
+            var _url;
+            if($("#role").val() == '1') {
+              _url = '/userAll'
+            }else{
+              _url = '/userFind'
+            }
+
+            $.ajax({
+                url: _url,
+                type: 'POST',
+                data: {id:$("#userId").val()},
+                success : function(data) {
+                  var _userList = "<option value='init'>사용자선택</option>";
+                  for(var i=0; i< data.userList.length; i++) {
+                    _userList += "<option value='" + data.userList[i].id + "'>" 
+                                     + data.userList[i].name + "</option>";
+                  }
+                  $("#sel_userList").html(_userList);
+                },
+                error : function() {				
+                  alert("사용자 정보 리스트 취득 실패");
+                }
             });
-        });
+
+            $("#excelExport").click(function(){
+              $.ajax({ 
+                      type: "POST",
+                      url: "/ExcelExport", 
+                      data:$("form[name=target]").serialize(),
+                      // 엑셀 다운로드 관련 미들웨어로 url 
+                      success: function(resp){ 
+                        if(!resp.result) { 
+                          alert('엑셀 다운로드 중 문제가 발생했습니다.'); 
+                          return false; 
+                        } 
+                        let excelUri = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"; 
+                        let excelUrl = excelUri + resp.content; 
+                        // resp.content는 엑셀 데이터입니다. 
+                        let filename = '근무표' 
+                        // 다운받는 파일의 이름 지정 
+                        setTimeout(function () { 
+                          var a = document.createElement("a");
+                           a.href = excelUrl; 
+                           a.download = filename;
+                            a.click(); 
+                        }, 100); 
+                      } 
+                    });
+              });
+          });
     </script>
   </head>
 
   <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -72,12 +116,32 @@
           <h1 class="page-header">데이터 추출 및 리포트</h1>
           <input type="hidden" id="role" name="role" value=<%= role %>>
           <input type="hidden" id="userId" name="userId" value=<%= userId %>>
-          <div>
+         
+          <div class="container" style="margin-left: -10mm;">
+            <form id="target" name="target">	
+              <div style="border: 4px dashed #bcbcbc;">		
+                <label style="font-size: x-large; margin-left: 3ch;">[출력기간] </label>
+                <div style="font-size: x-large; margin-left: 3ch;">
+                  시작일자 : <input type="text" id="startDate" name="startDate" style="width: 150px;" >
+                  종료일자 : <input type="text" id="endDate" name="endDate" style="width: 150px;" >
+                </div>
+
+                <div class="form-group" style="width:350px">
+                  <label style="font-size: x-large; margin-left: 3ch;">[대상자] </label>
+                  <select id="sel_userList" class="form-control" name="selUserList" style="width:300px; margin-left: 6ch;font-size: large;">							
+                  </select>
+                </div>
+              </div>
+            </form>
+            <br/>
+            <br/>
+            <br/>
+
             <div class="form-group" style="width:350px; float:left;">
-              <label style="font-size: x-large;">프로젝트 야근 파일 다운로드 </label>              
+              <label style="font-size: x-large;">프로젝트 출근부 파일 다운로드 </label>              
             </div>      
             <div class="form-group" style="width:350px; float:left;">
-              <button type="button" id="workSearch" class="btn btn-default" style="width:80px;">출력</button>
+              <button type="button" id="excelExport" class="btn btn-default" style="width:80px;">출력</button>
             </div>      
         </div>
       </div>

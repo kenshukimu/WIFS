@@ -80,6 +80,8 @@ Schema.createSchema = function(mongoose) {
         },
         findWorkInfo:function(param, callback) {                 
             this.find(param)
+            .sort('id')
+            .sort('workDate')
             .then((result) => {
                 callback(null,result);
             })

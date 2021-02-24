@@ -1,8 +1,16 @@
+/*
+* TITLE  : 데이터 출력 컨트롤
+* AUTHOR : 김현수
+* DATE   : 2021.01.25
+* DESC   : 데이터 출력에 관련된 DAO서비스
+*/
+
 const express = require('express')
 const pdf = require('html-pdf');
 const fs = require('fs');
 const path = require('path');
 const htmlmaker = require('../service/htmlMaker');
+const makeExcel = require('../service/makeExcel');
 
 const init_export = (req, res) => {
      //로그인 세션확인처리
@@ -13,6 +21,7 @@ const init_export = (req, res) => {
     }
 }
 
+//PDF작성
 const prt_overTime_report = (req, res) => {
 
     console.dir(req.body);
@@ -51,7 +60,8 @@ const prt_overTime_report = (req, res) => {
         options = { format: 'A4',
         header: {
             "height": "45mm",
-            "contents": '<div style="text-align:center;font-weight: bold; font-size: 2.0em;line-height: 1.0em;font-family: 돋움체;">야근 신청서</div>'
+            "margin" : "10,0,0,0",
+            "contents": '<div style="text-align:center;font-weight: bold; font-size: 2.0em;line-height: 1.0em;font-family: 돋움체;margin:60px;">야근 신청서</div>'
         },
         footer: {  
             "height":"50mm", 
@@ -65,7 +75,7 @@ const prt_overTime_report = (req, res) => {
         options = { format: 'A4',
         header: {
             "height": "45mm",
-            "contents": '<div style="text-align:center;font-weight: bold; font-size: 2.0em;line-height: 1.0em;font-family: 돋움체;">휴가 신청서</div>'
+            "contents": '<div style="text-align:center;font-weight: bold; font-size: 2.0em;line-height: 1.0em;font-family: 돋움체;margin:60px;">휴가 신청서</div>'
         },
         footer: {  
             "height":"50mm", 
@@ -77,9 +87,7 @@ const prt_overTime_report = (req, res) => {
     
     }
    
-    console.log(html);
-
-    pdf.create(html, options).toFile("./filetmp/" + _file_name, function(err, _res) {
+    pdf.create(html, options).toFile(path.join('/home/ec2-user/WIFS/','/filetmp/') + _file_name, function(err, _res) {
         if (err) return console.log(err);       
         console.log(res);
 
@@ -89,10 +97,11 @@ const prt_overTime_report = (req, res) => {
     });
 }
 
+//PDF출력
 const savePdf = (req, res) => {
-    var _filePath = "D:/private_folder/Kenshukimu'sPlayground/NodeJs/filetmp";
+    var _filePath = "/home/ec2-user/WIFS/filetmp/";
     res.setHeader('Content-type', 'application/pdf'); // 파일 형식 지정
-    res.download(_filePath + "/" + req.query.fileName, req.query.NewFileName+ ".pdf" , function(err){
+    res.download(_filePath + req.query.fileName, req.query.NewFileName+ ".pdf" , function(err){
         if(err){
             res.json({err:err});
         }else{
@@ -101,8 +110,85 @@ const savePdf = (req, res) => {
     });
 }
 
+//엑셀출력
+const saveAsExcel = (req, res) => {
+    var database = req.app.get('database');
+
+    console.dir(req.body);
+
+    var _dataSet = new Object();
+    var _data = new Array();
+    var _headerList = [
+                        ['id','아이디'],
+                        ['name','이름'],
+                        ['workDate','근무일자'],
+                        ['workTimeS','근무시작시간'],
+                        ['workTimeE','근무종료시간'],
+                        ['workHour','총근무시간'],
+                        ['workOver','연장근무시간'],
+                        ['overTimeReason','연장근무사유']
+                      ];
+
+    var param = new Object();
+    var sDate = req.body.startDate.replace(/-/gi, "");
+    var eDate =  req.body.endDate.replace(/-/gi, "");
+
+    //검색조건 설정이 안되었을 경우
+    if(sDate == '') {
+        sDate = '20000101';
+    }
+    if(eDate == '') {
+        eDate = '20300101';
+    }
+
+    if(req.body.selUserList != 'init') {
+        param.id = req.body.selUserList;
+    }
+    
+    param.departNo = req.session.deptNo;
+    
+    database.UserModel.findUserWithWorkList(param, '1', sDate, eDate,function(err, result) {    
+        result.forEach(obj => {           
+            Object.entries(obj).forEach(([key, value]) => {
+                var userName = obj.name;    
+                if(`${key}`== 'workinfoList') {
+                    if(obj.workinfoList.length > 0) {
+                        
+                        obj.workinfoList.forEach(element => {
+                            var _item = new Object();
+                            
+                            _item.id = element.id;
+                            _item.name = userName;
+                            _item.workDate = element.workDate;
+                            _item.workTimeS = element.workTimeS;
+                            _item.workTimeE = element.workTimeE;
+                            _item.workHour = element.workHour;
+                            _item.workOver = element.workOver;
+                            _item.overTimeReason = element.overTimeReason;
+
+                            _data.push(_item);
+                        });
+                    }
+                }
+            }); 
+        });       
+
+        //console.dir(_data);
+
+        _dataSet.data = _data;
+        _dataSet.excelTitle = makeExcel.makeExcelFileHeader(_headerList);
+
+        param = new Object();
+        param.dataSet = _dataSet;
+
+        const report = makeExcel.makeExcelFile(param, '출근일람'); 
+        res.send({content: report.toString('base64'), filename: 'testFile', result:true}); 
+    });
+}
+
 module.exports = {
     init_export,
     prt_overTime_report,
-    savePdf
+    savePdf,
+    saveAsExcel
 }

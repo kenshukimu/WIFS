@@ -79,18 +79,11 @@ Schema.createSchema = function(mongoose) {
                 console.log(err);
             });
         },
-        findUserWithWorkList:function(param,subparam,callback) {              
-
+        findUserWithWorkList:function(param,subparam,sDate, eDate, callback) {     
             this.aggregate(
                 [
                     { $lookup:
                         {
-                            /*
-                            from: 'workinfos',
-                            localField: 'id',
-                            foreignField: 'id',
-                            as: 'workinfoList'
-                            */
                             from: 'workinfos',
                             as: 'workinfoList',
                             let: { id: '$id' },
@@ -100,6 +93,8 @@ Schema.createSchema = function(mongoose) {
                                                 $and: [
                                                             { $eq: ['$id', '$$id'] },
                                                             { $eq: ['$status', subparam] },
+                                                            { $gte: ['$workDate', sDate] },
+                                                            { $lte: ['$workDate', eDate] }
                                                     ]
                                             }
                                         }

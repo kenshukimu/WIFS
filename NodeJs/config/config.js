@@ -1,3 +1,10 @@
+/*
+* TITLE  : 기본 설정파일
+* AUTHOR : 김현수
+* DATE   : 2021.01.25
+* DESC   : 시스템에서 이용하는 기본적인 설정을 등록한다.
+*/
+
 
 /*
  * 설정 
@@ -45,7 +52,8 @@ module.exports = {
 
 		{file:'../controllers/dataController', path:'/dataExport', method:'init_export', type:'get'},
 		{file:'../controllers/dataController', path:'/pdfExport', method:'prt_overTime_report', type:'post'},
-		{file:'../controllers/dataController', path:'/savePdf', method:'savePdf', type:'get'}
+		{file:'../controllers/dataController', path:'/savePdf', method:'savePdf', type:'get'},
+		{file:'../controllers/dataController', path:'/ExcelExport', method:'saveAsExcel', type:'post'}
 	]
 }
 

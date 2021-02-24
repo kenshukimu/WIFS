@@ -1,3 +1,9 @@
+/*
+* TITLE  : 유저 관련 컨트롤
+* AUTHOR : 김현수
+* DATE   : 2021.01.25
+* DESC   : 유저에 관련된 DAO서비스
+*/
 const express = require('express');
 
 const user_login = (req, res, next) => {
@@ -162,7 +168,10 @@ const user_with_workList_forChart = (req,res) => {
     
     param.departNo = req.session.deptNo;
 
-    database.UserModel.findUserWithWorkList(param, req.body.status,function(err, result) {
+    var sDate = '20000101';
+    var eDate = '20300101';
+
+    database.UserModel.findUserWithWorkList(param, req.body.status, sDate, eDate, function(err, result) {
 
         //chartjs 데이터 만들기
         var labelsArray = new Array();
@@ -219,7 +228,10 @@ const user_with_workList= (req,res) => {
 
     param.departNo = req.session.deptNo;
 
-    database.UserModel.findUserWithWorkList(param, req.body.status,function(err, result) {
+    var sDate = '20000101';
+    var eDate = '20300101';
+
+    database.UserModel.findUserWithWorkList(param, req.body.status, sDate, eDate, function(err, result) {
 
         var param = {
             approveList:result
