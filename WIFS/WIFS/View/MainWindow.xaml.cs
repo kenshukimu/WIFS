@@ -561,6 +561,7 @@ namespace WIFS
 
                         if (window != null)
                         {
+                            this.Show();
                             await window.ShowMessageAsync("알림창", "등록에 실패하였습니다. 관리자에게 문의 부탁드립니다.");
                         }
                         break;
@@ -571,11 +572,11 @@ namespace WIFS
                         {
                             if (overTime > 0)
                             {
+                                this.Show();
                                 await window.ShowMessageAsync("알림창", "등록었습니다. 야근이 있는 경우 승인 후 야근시간이 반영되어 집니다.");
                             }
                             else
-                            {
-                                await window.ShowMessageAsync("알림창", "등록되었습니다.");
+                            {                                
                                 cf.workStatus = "0";
                                 _uc_dashboard = new uc_DashBoard();
                                 uc_Class.Uc_Link(Contents_Border, _uc_dashboard);

@@ -93,7 +93,7 @@
 						//{_id:$("#_id").val(), _status:"1", _kb:$("#_kb").val(), _name:$("#name").val()},
 						$("form[name=target]").serialize(),
 						success : function(data) {
-							msg.data('messageBox').info('안내', '등록완료 되었습니다. ', 10, false);
+							msg.data('messageBox').info('안내', '승인완료 되었습니다. ', 10, false);
 							window.opener.fnRefresh();
 							$("#updateWorkInfo").hide();
 						},

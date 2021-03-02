@@ -292,3 +292,6 @@ D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.e
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\obj\Debug\WIFS.pdb
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\ToastNotifications.dll
 D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\ToastNotifications.Messages.dll
+D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\Resources\work.ico
+D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\Resources\working.ico
+D:\private_folder\Kenshukimu'sPlayground\Wifs_Project\WIFS\WIFS\bin\Debug\Resources\working-time.ico

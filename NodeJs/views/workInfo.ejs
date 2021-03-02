@@ -183,11 +183,19 @@
                         _approveList += "</tr>";
                     }
                   }
-                  
 
                   $("#approveList").html(_approveList);
             
                   $("#approveList tr").click(function(){  
+                    var tr = $(this);
+                      if(tr.find("td:eq(4)").text() == '') return;  
+                      //_id로 검색 (팝업실행)
+                      var url = "/popupWorkInfo?_id=" + tr.find("td:eq(4)").text()
+                                + "&name="+tr.find("td:eq(1)").text()
+                                + "&kb=1";
+                      var name = "상세정보";
+                      var option = "width = 500, height = 670, top = 0, left = 300, location = no"
+                      window.open(url, name, option);
                   });
                 },
                 error : function() {				
@@ -236,8 +244,8 @@
           <h1 class="page-header">Dashboard</h1>
 
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-4 placeholder">
-             <canvas id="myChart" width="400" height="400"></canvas>
+            <div class="col-xs-2 col-sm-6 placeholder">
+             <canvas id="myChart" width="400" height="300"></canvas>
             </div>
             <!--
             <div class="col-xs-6 col-sm-4 placeholder">
@@ -256,7 +264,7 @@
               </table>
             </div>
           -->
-            <div class="col-xs-6 col-sm-4 placeholder" style='width:500px'>
+            <div class="col-xs-5 col-sm-5 placeholder" >
               <h2 class="sub-header">승인요청</h2>
               <table class="table table-striped">
                 <thead>

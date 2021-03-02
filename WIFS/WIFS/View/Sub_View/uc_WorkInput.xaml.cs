@@ -340,7 +340,7 @@ namespace WIFS.View.Sub_View
 
                 var _day = CDateTime.GetDayOfWeekHangul(workStart);
 
-                if ((bool)cheDinner.IsChecked || _day.Equals("토") || _day.Equals("일"))
+                if ((bool)cheHoly.IsChecked || _day.Equals("토") || _day.Equals("일"))
                 {
                     overTime = spanMinute;
                 }
