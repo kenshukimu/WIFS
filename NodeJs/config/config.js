@@ -21,7 +21,8 @@ module.exports = {
 		{file:'../models/users', collection:'users', schemaName:'Users', modelName:'UserModel'},
 		{file:'../models/codes', collection:'codes', schemaName:'Codes', modelName:'CodesModel'},
 		{file:'../models/weekInfo', collection:'weekinfos', schemaName:'Weekinfo', modelName:'WeekinfoModel'},
-		{file:'../models/workInfo', collection:'workinfos', schemaName:'Workinfo', modelName:'WorkinfoModel'}
+		{file:'../models/workInfo', collection:'workinfos', schemaName:'Workinfo', modelName:'WorkinfoModel'},
+		{file:'../models/schedule', collection:'schedules', schemaName:'Schedule', modelName:'ScheduleModel'}
 	],
 	route_info: [
 		{file:'../controllers/userController', path:'/login', method:'user_login', type:'post'},
@@ -53,7 +54,12 @@ module.exports = {
 		{file:'../controllers/dataController', path:'/dataExport', method:'init_export', type:'get'},
 		{file:'../controllers/dataController', path:'/pdfExport', method:'prt_overTime_report', type:'post'},
 		{file:'../controllers/dataController', path:'/savePdf', method:'savePdf', type:'get'},
-		{file:'../controllers/dataController', path:'/ExcelExport', method:'saveAsExcel', type:'post'}
+		{file:'../controllers/dataController', path:'/ExcelExport', method:'saveAsExcel', type:'post'},
+
+		{file:'../controllers/scheduleController', path:'/scheduleAdd', method:'schedule_add', type:'post'},
+		{file:'../controllers/scheduleController', path:'/scheduleDel', method:'schedule_delete', type:'post'},
+		{file:'../controllers/scheduleController', path:'/scheduleFind', method:'schedule_find', type:'post'},
+		{file:'../controllers/scheduleController', path:'/scheduleUpdate', method:'schedule_update', type:'post'}
 	]
 }
 

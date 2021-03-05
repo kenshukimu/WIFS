@@ -95,6 +95,8 @@ const workinfo_find = (req, res) => {
     if(req.body.id !== undefined) {
         param.id = req.body.id;
     }    
+
+    console.log(req.body.id);
     
     if(req.body.searchDate !== undefined) {
         
@@ -116,13 +118,13 @@ const workinfo_find = (req, res) => {
         }else{
             _hourCriteria.$lt = 0;
             param.workOver = _hourCriteria;
-        }
-        
+        }        
     }
 
-    if(req.body._id !== undefined) {        
+    if(req.body._id !== undefined) {
         param._id = req.body._id;
-    }
+    }   
+
 
     database.WorkinfoModel.findWorkInfo(param, function(err, result) {
         var param = {
