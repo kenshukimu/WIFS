@@ -9,6 +9,7 @@
             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
             mc:Ignorable="d"
+            Loaded="OnLoad"
             d:DesignHeight="350" d:DesignWidth="580" Background="#2E3349">
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>

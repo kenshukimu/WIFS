@@ -18,14 +18,14 @@ namespace WIFS
         
         public uc_Calendar()
         {
-            Language = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentCulture.Name);
+            InitializeComponent();            
             _list = new AppointmentBOList();
-            InitializeComponent();
+
+            Language = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentCulture.Name);
+            Unloaded += OnUnload;
 
             scheduler1.LayoutUpdated += new EventHandler(scheduler1_LayoutUpdated);
-
             scheduler1.VisualIntervalScale = TimeSpan.FromMinutes(30);
-
             scheduler1.CalendarHelper.StartDayTime = TimeSpan.Parse("09:00:00");
             scheduler1.Settings.FirstVisibleTime = TimeSpan.Parse("09:00:00");
 
@@ -36,12 +36,17 @@ namespace WIFS
             scheduler1_LayoutUpdated(null, null);
 
             scheduler1.EndUpdate();
+        }
 
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             Import();
         }
 
+
         private async void Import()
         {
+            _list.Clear();
             ScheduleEntity se = new ScheduleEntity()
             {
                 id = cf.userID
@@ -158,6 +163,11 @@ namespace WIFS
                 // it's mapped to the Employees.LastName field which doesn't allow empty strings.
                 c.MenuCaption = "test contact";
             }
+        }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

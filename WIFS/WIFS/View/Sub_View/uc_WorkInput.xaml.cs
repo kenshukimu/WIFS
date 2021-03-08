@@ -36,7 +36,7 @@ namespace WIFS
         {
             InitializeComponent();
 
-            _vm = new ToastViewModel("1");
+            _vm = new ToastViewModel("1", 5, "TopRight", 10, 10);
             Unloaded += OnUnload;
 
             if (cf.workStatus != null && cf.workStatus.Equals("1"))
@@ -58,10 +58,12 @@ namespace WIFS
             String[] wi = weekinfo[1].Split('^');
             sDate.Content = wi[0];
             eDate.Content = wi[1];
+        }
 
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             //저장된 리스트 가져오기
             GetList();
-
         }
 
         private void PreData_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -13,7 +13,7 @@ const utils = require('../utils/utils');
 
 const init_workInfo = (req, res) => {
     //로그인 세션확인처리
-    if(!utils.isEmpty(req.session.userId)) {
+    if(utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workInfo', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -22,7 +22,7 @@ const init_workInfo = (req, res) => {
 
 const init_workUsers = (req, res) => {   
     //로그인 세션확인처리
-    if(!utils.isEmpty(req.session.userId)) {
+    if(utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workUsers', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -31,7 +31,7 @@ const init_workUsers = (req, res) => {
 
 const init_workVac = (req, res) => {   
     //로그인 세션확인처리
-    if(!utils.isEmpty(req.session.userId)) {
+    if(utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workVac', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -40,7 +40,7 @@ const init_workVac = (req, res) => {
 
 const move_popupWorkInfo = (req, res) => {   
     //로그인 세션확인처리
-    if(!utils.isEmpty(req.session.userId)) {
+    if(utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         var _kbName;
@@ -97,8 +97,6 @@ const workinfo_find = (req, res) => {
         param.id = req.body.id;
     }    
 
-    console.log(req.body.id);
-    
     if(!utils.isEmpty(req.body.searchDate)) {
         
         var _date = req.body.searchDate.split("^");

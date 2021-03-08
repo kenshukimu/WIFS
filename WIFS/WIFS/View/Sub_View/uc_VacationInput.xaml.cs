@@ -34,7 +34,7 @@ namespace WIFS
         {
             InitializeComponent();
 
-            _vm = new ToastViewModel("1");
+            _vm = new ToastViewModel("1", 5, "TopRight", 10, 10);
             Unloaded += OnUnload;
 
             DataTable dataTable = new DataTable();
@@ -57,10 +57,12 @@ namespace WIFS
 
             cbVacationKb.SelectedIndex = 0;
 
+        }
+
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             setLeftTime();
-
             GetList();
-
         }
 
         private void Btn_workTimeReg_Click(object sender, RoutedEventArgs e)

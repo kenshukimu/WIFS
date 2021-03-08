@@ -15,7 +15,7 @@ const utils = require('../utils/utils');
 
 const init_export = (req, res) => {
      //로그인 세션확인처리
-     if(!utils.isEmpty(req.session.userId)) {
+     if(utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('dataExport', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  

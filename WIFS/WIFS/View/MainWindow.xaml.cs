@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,7 +29,8 @@ namespace WIFS
         uc_Calendar _uc_calendar = null;
 
         private readonly ToastViewModel _vm;
-
+        private readonly ToastViewModel _vm2;
+        
         public System.Windows.Forms.NotifyIcon notify;
 
         private int _moveFg = 0;
@@ -37,7 +39,10 @@ namespace WIFS
         {
             InitializeComponent();
 
-            _vm = new ToastViewModel("0");
+            _vm = new ToastViewModel("0", 15, "", 5, 5);
+            _vm2 = new ToastViewModel("0", 15, "BottomCenter", 1, 
+               System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height / 2);
+
             Unloaded += OnUnload;
 
             string strVersionText = Assembly.GetExecutingAssembly().FullName
@@ -76,6 +81,7 @@ namespace WIFS
 
             labDate.Content = _strDate;
             labTime.Content = _strTime;
+            var sb = new StringBuilder();
 
             //일정알림처리 (근무시일경우만)
             if (cf.autoAlarm.Equals("0") && cf.workStatus.Equals("1"))
@@ -87,7 +93,18 @@ namespace WIFS
                         TimeSpan ts = _item.Start - DateTime.Now.AddMinutes(5);
 
                         if (ts.TotalSeconds < 0 && ts.TotalSeconds > -1)
-                            _vm.ShowWarning(CDateTime.GetDateTimeFormat(_item.Start, "yyyy-mm-dd hh:nn:ss") + " " + _item.Subject + " 5분전입니다");
+                        {
+                            sb.Append(CDateTime.GetDateTimeFormat(_item.Start, "yyyy-mm-dd hh:nn:ss"))
+                              .Append(" ")
+                              .Append(_item.Subject)
+                              .Append("[")
+                              .Append(_item.Body)
+                              .Append("] ")
+                              .Append(" 5분전입니다");
+
+
+                            _vm2.ShowWarning(sb.ToString());
+                        }
                     }
                 }
             }
@@ -236,32 +253,32 @@ namespace WIFS
         }
 
         private void Btn_DataInput_Click(object sender, RoutedEventArgs e)
-        {            
-            _uc_workInput = new uc_WorkInput();
+        {
+            if(_uc_workInput == null)  _uc_workInput = new uc_WorkInput();
             uc_Class.Uc_Link(Contents_Border, _uc_workInput);
         }
 
         private void Btn_DashBoard_Click(object sender, RoutedEventArgs e)
         {
-            _uc_dashboard = new uc_DashBoard();
+            if (_uc_dashboard == null) _uc_dashboard = new uc_DashBoard();
             uc_Class.Uc_Link(Contents_Border, _uc_dashboard);
         }
 
         private void Btn_vacationInput_Click(object sender, RoutedEventArgs e)
         {
-            _uc_vacationInput = new uc_VacationInput();
+            if (_uc_vacationInput == null) _uc_vacationInput = new uc_VacationInput();
             uc_Class.Uc_Link(Contents_Border, _uc_vacationInput);
         }
 
         private void Btn_Setting_Click(object sender, RoutedEventArgs e)
         {
-            _uc_setting = new uc_Setting();
+            if (_uc_setting == null) _uc_setting = new uc_Setting();
             uc_Class.Uc_Link(Contents_Border, _uc_setting);
         }
 
         private void Btn_alarm_Click(object sender, RoutedEventArgs e)
         {
-            _uc_calendar = new uc_Calendar();
+            if (_uc_calendar == null) _uc_calendar = new uc_Calendar();
             uc_Class.Uc_Link(Contents_Border, _uc_calendar);
         }
 

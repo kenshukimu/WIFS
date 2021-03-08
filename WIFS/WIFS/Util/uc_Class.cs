@@ -19,15 +19,6 @@ namespace WIFS
 
         public static void Uc_Link(System.Windows.Controls.Grid grd, System.Windows.Controls.UserControl uc)
         {
-            //CsharpWebComponent Process 삭제
-            //Process[] pros = Process.GetProcessesByName("CefSharp.BrowserSubprocess");
-
-            //Process[] pros = Process.GetProcesses();
-
-            //foreach (Process p in pros)
-            //{
-            //    p.Kill();
-            //}
             if (grd.Children.Count > 0)
             {
                 grd.Children.Remove(uc);

@@ -18,17 +18,29 @@ namespace WIFS
     {
         private readonly Notifier _notifier;
 
-        public ToastViewModel(String kb)
+        public ToastViewModel(String kb, int timer, String position, double x, double y)
         {
+            Corner _corner = Corner.BottomRight;
+            switch (position)
+            {
+                case "BottomCenter":
+                    _corner = Corner.BottomCenter;
+                    break;
+
+                case "TopRight":
+                    _corner = Corner.TopRight;
+                    break;
+            }
+
             switch (kb)
             {
                 case "0":
                     _notifier = new Notifier(cfg =>
                     {
                         cfg.PositionProvider = new PrimaryScreenPositionProvider(
-                            corner: Corner.BottomRight,
-                            offsetX: 5,
-                            offsetY: 5);
+                            corner:  _corner,
+                            offsetX: x,
+                            offsetY: y);
 
                         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
                             notificationLifetime: TimeSpan.FromSeconds(15),
@@ -47,9 +59,9 @@ namespace WIFS
                     {
                         cfg.PositionProvider = new WindowPositionProvider(
                             parentWindow: Application.Current.MainWindow,
-                            corner: Corner.TopRight,
-                            offsetX: 10,
-                            offsetY: 10);
+                            corner: _corner,
+                            offsetX: x,
+                            offsetY: y);
 
 
                         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(

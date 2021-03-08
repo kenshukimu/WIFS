@@ -21,7 +21,7 @@ namespace WIFS
         {
             InitializeComponent();
 
-            _vm = new ToastViewModel("1");
+            _vm = new ToastViewModel("1", 5, "TopRight", 10, 10);
             Unloaded += OnUnload;
 
             String[] weekinfo = new CommonUtil().getWeekInfo(DateTime.Now.ToString("yyyyMMdd"));
@@ -29,7 +29,10 @@ namespace WIFS
             String[] wi = weekinfo[1].Split('^');
             sDate.Content = wi[0];
             eDate.Content = wi[1];
+        }
 
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             //DashBoard에 표시 할 내용 가져오기
             showDashBoard();
         }

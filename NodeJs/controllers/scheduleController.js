@@ -44,7 +44,7 @@ const schedule_find = (req, res) => {
     var database = req.app.get('database');    
     var param = new Object();
 
-    if(typeof req.body._id !== undefined) {        
+    if(!utils.isEmpty(req.body.id)) {        
         param.id = req.body.id;
     }
 
