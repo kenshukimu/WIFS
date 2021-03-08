@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 
-namespace WIFS.Util
+namespace WIFS
 {
 	public enum DateInterval
 	{

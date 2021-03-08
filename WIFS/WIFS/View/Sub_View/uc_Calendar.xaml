@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="WIFS.uc_Calendar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c1sched="clr-namespace:C1.WPF.Schedule;assembly=C1.WPF.Schedule.4"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:local="clr-namespace:WIFS"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="580" Background="#2E3349">
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="BorderBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFA3AEB9" Offset="0" />
+            <GradientStop Color="#FF8399A9" Offset="0.375" />
+            <GradientStop Color="#FF718597" Offset="0.375" />
+            <GradientStop Color="#FF617584" Offset="1" />
+        </LinearGradientBrush>
+        <DataTemplate x:Key="customEditAppointmentTemplate">
+            <local:EditAppointmentControl />
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Margin=" 0 0 0 10">
+            <StackPanel Margin="3" Orientation="Horizontal">
+                <Label Content="보기형식 : " VerticalAlignment="Center" FontWeight="ExtraBold" Foreground="White" />
+                <ComboBox x:Name="views" SelectedIndex="3" SelectionChanged="Views_SelectionChanged" Margin="5" IsEditable="False" IsReadOnly="True" Width="90" ToolTip="Change View">
+                    <ComboBox.Items>
+                        <sys:String>Day</sys:String>
+                        <sys:String>Work Week</sys:String>
+                        <sys:String>Week</sys:String>
+                        <sys:String>Month</sys:String>
+                        <sys:String>Time Line</sys:String>
+                    </ComboBox.Items>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        <Grid SnapsToDevicePixels="True" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <c1sched:C1Scheduler x:Name="scheduler1" Margin="0 -1 0 0" BorderThickness="1" Grid.Row="1" 
+                                 BorderBrush="{StaticResource BorderBrush}" 
+                                 EditAppointmentTemplate="{StaticResource customEditAppointmentTemplate}"
+                                 Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=c1sched:C1Scheduler, ResourceId=WeekStyle}}">
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.AppointmentProperties.MappingName" Value="Properties" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.Body.MappingName" Value="Body" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.End.MappingName" Value="End" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.IdMapping.MappingName" Value="Id" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.Location.MappingName" Value="Location" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.Start.MappingName" Value="Start" />
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.Subject.MappingName" Value="Subject" />
+
+
+                <!-- Bind AppointmentStorage.DataSource to the Window1.Appointments property -->
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.TextMapping.MappingName" Value="BOProperty1"/>
+
+                <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.DataSource" Value="{Binding Path=Appointments, Mode=OneWay, 
+                    RelativeSource={RelativeSource AncestorType={x:Type local:uc_Calendar}}}" />
+            </c1sched:C1Scheduler>
+        </Grid>
+    </Grid>
+</UserControl>

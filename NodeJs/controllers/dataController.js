@@ -11,10 +11,11 @@ const fs = require('fs');
 const path = require('path');
 const htmlmaker = require('../service/htmlMaker');
 const makeExcel = require('../service/makeExcel');
+const utils = require('../utils/utils');
 
 const init_export = (req, res) => {
      //로그인 세션확인처리
-     if(req.session.userId == '' || req.session.userId  === undefined) {
+     if(!utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('dataExport', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -23,8 +24,6 @@ const init_export = (req, res) => {
 
 //PDF작성
 const prt_overTime_report = (req, res) => {
-
-    console.dir(req.body);
     
     let date_ob = new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
@@ -113,9 +112,6 @@ const savePdf = (req, res) => {
 //엑셀출력
 const saveAsExcel = (req, res) => {
     var database = req.app.get('database');
-
-    console.dir(req.body);
-
     var _dataSet = new Object();
     var _data = new Array();
     var _headerList = [
@@ -172,8 +168,6 @@ const saveAsExcel = (req, res) => {
                 }
             }); 
         });       
-
-        //console.dir(_data);
 
         _dataSet.data = _data;
         _dataSet.excelTitle = makeExcel.makeExcelFileHeader(_headerList);

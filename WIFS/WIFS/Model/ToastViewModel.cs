@@ -12,7 +12,7 @@ using ToastNotifications.Lifetime.Clear;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
-namespace WIFS.Model
+namespace WIFS
 {
     public class ToastViewModel : INotifyPropertyChanged
     {
@@ -31,7 +31,7 @@ namespace WIFS.Model
                             offsetY: 5);
 
                         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                            notificationLifetime: TimeSpan.FromSeconds(6),
+                            notificationLifetime: TimeSpan.FromSeconds(15),
                             maximumNotificationCount: MaximumNotificationCount.FromCount(6));
 
                         cfg.Dispatcher = Application.Current.Dispatcher;

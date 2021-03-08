@@ -77,6 +77,10 @@
     <Reference Include="AutoClosingMessageBox, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoClosingMessageBox.1.0.0.2\lib\net40\AutoClosingMessageBox.dll</HintPath>
     </Reference>
+    <Reference Include="C1.WPF.4, Version=4.0.20192.658, Culture=neutral, PublicKeyToken=2aa4ec5576d6c3ce, processorArchitecture=MSIL" />
+    <Reference Include="C1.WPF.DateTimeEditors.4, Version=4.0.20192.658, Culture=neutral, PublicKeyToken=2aa4ec5576d6c3ce, processorArchitecture=MSIL" />
+    <Reference Include="C1.WPF.Schedule.4, Version=4.0.20192.658, Culture=neutral, PublicKeyToken=2aa4ec5576d6c3ce, processorArchitecture=MSIL" />
+    <Reference Include="C1.WPF.Schedule.Themes.Legacy.4, Version=4.0.20192.658, Culture=neutral, PublicKeyToken=2aa4ec5576d6c3ce, processorArchitecture=MSIL" />
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.4.0\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
@@ -224,8 +228,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\AppointmentBusinessObject.cs" />
     <Compile Include="Model\ToastViewModel.cs" />
     <Compile Include="Model\WeekEntity.cs" />
+    <Compile Include="Model\ScheduleEntity.cs" />
     <Compile Include="Model\WorkEntity.cs" />
     <Compile Include="Model\UserEntity.cs" />
     <Compile Include="Util\CDateTime.cs" />
@@ -233,11 +239,17 @@
     <Compile Include="Util\CommonUtil.cs" />
     <Compile Include="Util\InitSetting.cs" />
     <Compile Include="Util\uc_Class.cs" />
+    <Compile Include="View\Sub_View\EditAppointmentControl.xaml.cs">
+      <DependentUpon>EditAppointmentControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sub_View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sub_View\pop_inputReason.xaml.cs">
       <DependentUpon>pop_inputReason.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sub_View\uc_Calendar.xaml.cs">
+      <DependentUpon>uc_Calendar.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sub_View\uc_Setting.xaml.cs">
       <DependentUpon>uc_Setting.xaml</DependentUpon>
@@ -251,6 +263,10 @@
     <Compile Include="View\Sub_View\uc_DashBoard.xaml.cs">
       <DependentUpon>uc_DashBoard.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\Sub_View\EditAppointmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Sub_View\Login.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -287,6 +303,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Sub_View\uc_Calendar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Sub_View\uc_Setting.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -318,6 +338,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIFS.Util
+namespace WIFS
 {
     public class ClientConfig
     {  
@@ -27,5 +27,6 @@ namespace WIFS.Util
         public string dept;
 
         public IList<WeekEntity> weekList { get; set; }
+        public IList<AppointmentBusinessObject> scheduleList { get; set; }
     }
 }

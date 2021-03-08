@@ -7,14 +7,13 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using WIFS.Model;
-using WIFS.Util;
 
-namespace WIFS.View.Sub_View
+namespace WIFS
 {   
     /// <summary>
     /// uc_DashBoard.xaml에 대한 상호 작용 논리
@@ -203,6 +202,32 @@ namespace WIFS.View.Sub_View
                 {
                     toggleSwitch.IsChecked = false;
                 }
+                DateControl2();
+            }
+        }
+
+        private async void DateControl2()
+        {
+            ScheduleEntity se = new ScheduleEntity()
+            {
+                id = cf.userID,
+                date = CDateTime.GetDateTimeFormat(DateTime.Now, "yyyymmdd")
+            };
+
+            var result3 = Task.Run(() => new CallWebApi().CallPostApiSchedules("scheduleFind", se));
+
+            Schedule scheduleList = JsonConvert.DeserializeObject<Schedule>(await result3);
+            cf.scheduleList = new List<AppointmentBusinessObject>();
+
+            foreach (ScheduleEntity _item in scheduleList.scheduleList)
+            {
+                AppointmentBusinessObject newObject = new AppointmentBusinessObject();
+                newObject.Subject = _item.subject;
+                newObject.Start = CDateTime.GetDateFrom_yyyyMMddHHmmss(_item.start);
+                newObject.End = CDateTime.GetDateFrom_yyyyMMddHHmmss(_item.end);
+                newObject.Body = _item.body;
+
+                cf.scheduleList.Add(newObject);
             }
         }
 

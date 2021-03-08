@@ -9,7 +9,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d"
     Title="출근관리시스템" 
-    Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" 
+    Height="500" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" 
     x:Name="MainForm">
     <Grid>
         <Grid.Effect>
@@ -78,6 +78,12 @@
                         <iconPacks:PackIconMaterial Kind="Airport" Width="Auto" Height="Auto" Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
                     </DockPanel>
                 </Button>
+                <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_alarm" ToolTip="알림설정" Click="Btn_alarm_Click">
+                    <DockPanel Width="220" Margin="15,0,0,0">
+                        <Label Content="일 정 알 림" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <iconPacks:PackIconIonicons Kind="CalendarMD" Width="Auto" Height="Auto" Margin="10,10,50,10" Foreground="#FF9097E4" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Button>
                 <Button Height="50" Style="{DynamicResource menubutton}" HorizontalAlignment="Left" x:Name="btn_Setting" ToolTip="셋팅" Click="Btn_Setting_Click">
                     <DockPanel Width="220" Margin="15,0,0,0">
                         <Label Content="환 경 설 정" Foreground="#007EF6" FontSize="21" x:Name="lbl_menu4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -86,7 +92,7 @@
                 </Button>
 
                 <Canvas>
-                    <Border Canvas.Left="10" Canvas.Top="5" CornerRadius="10,10,10,10" Width="200">
+                    <Border Canvas.Left="10" Canvas.Top="20" CornerRadius="10,10,10,10" Width="200">
                         <StackPanel>
                             <Label x:Name="labDate" FontSize="16" Content="0000년00월00일" Foreground="White" Width="200" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"></Label>
                             <Label x:Name="labTime" FontSize="16"  Content="00시00분00초" Foreground="White" Width="200" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"></Label>

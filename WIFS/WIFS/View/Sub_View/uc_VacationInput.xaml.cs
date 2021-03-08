@@ -11,10 +11,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using WIFS.Model;
-using WIFS.Util;
 
-namespace WIFS.View.Sub_View
+namespace WIFS
 {
     /// <summary>
     /// uc_DashBoard.xaml에 대한 상호 작용 논리

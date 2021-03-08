@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace WIFS.Util
+namespace WIFS
 {
     public sealed class InitSetting
     {
@@ -75,12 +75,14 @@ namespace WIFS.Util
             if (fg == 0)
             {
                 WritePrivateProfileString("CONFIG", "ServerIP", "54.180.140.98", IniFilePath);
+                //WritePrivateProfileString("CONFIG", "ServerIP", "localhost", IniFilePath);
                 WritePrivateProfileString("CONFIG", "userID", param[1], IniFilePath);
                 WritePrivateProfileString("CONFIG", "userPass", param[2], IniFilePath);
                 WritePrivateProfileString("CONFIG", "autoLogin", param[3], IniFilePath);
                 WritePrivateProfileString("CONFIG", "autoAlarm", param[4], IniFilePath);
 
                 cConf.serverIP = "54.180.140.98";
+                //cConf.serverIP = "localhost";
                 cConf.userID = param[1];
                 cConf.autoLogin = param[3];
                 cConf.autoAlarm = param[4];

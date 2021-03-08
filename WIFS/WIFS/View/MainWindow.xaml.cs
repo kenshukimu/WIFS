@@ -12,9 +12,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using ToastNotifications.Core;
-using WIFS.Model;
-using WIFS.Util;
-using WIFS.View.Sub_View;
 
 namespace WIFS
 {
@@ -26,8 +23,9 @@ namespace WIFS
         //HttpClient client = new HttpClient();
         uc_DashBoard _uc_dashboard = null;
         uc_WorkInput _uc_workInput = null;
-        uc_Setting _uc_sessing = null;
+        uc_Setting _uc_setting = null;
         uc_VacationInput _uc_vacationInput = null;
+        uc_Calendar _uc_calendar = null;
 
         private readonly ToastViewModel _vm;
 
@@ -78,6 +76,21 @@ namespace WIFS
 
             labDate.Content = _strDate;
             labTime.Content = _strTime;
+
+            //일정알림처리 (근무시일경우만)
+            if (cf.autoAlarm.Equals("0") && cf.workStatus.Equals("1"))
+            {
+                if (cf.scheduleList != null)
+                {
+                    foreach (var _item in cf.scheduleList)
+                    {
+                        TimeSpan ts = _item.Start - DateTime.Now.AddMinutes(5);
+
+                        if (ts.TotalSeconds < 0 && ts.TotalSeconds > -1)
+                            _vm.ShowWarning(CDateTime.GetDateTimeFormat(_item.Start, "yyyy-mm-dd hh:nn:ss") + " " + _item.Subject + " 5분전입니다");
+                    }
+                }
+            }
 
             //09시가 되었는데 근무가 처리 안되었을 경우 (월~금)        
             //60초동안 클릭을 안할 경우 출근안함으로 처리
@@ -242,8 +255,14 @@ namespace WIFS
 
         private void Btn_Setting_Click(object sender, RoutedEventArgs e)
         {
-            _uc_sessing = new uc_Setting();
-            uc_Class.Uc_Link(Contents_Border, _uc_sessing);
+            _uc_setting = new uc_Setting();
+            uc_Class.Uc_Link(Contents_Border, _uc_setting);
+        }
+
+        private void Btn_alarm_Click(object sender, RoutedEventArgs e)
+        {
+            _uc_calendar = new uc_Calendar();
+            uc_Class.Uc_Link(Contents_Border, _uc_calendar);
         }
 
         private async void AutoLogin()

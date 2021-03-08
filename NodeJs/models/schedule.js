@@ -26,6 +26,11 @@ Schema.createSchema = function(mongoose) {
             required:false,
             trim: true
         },
+        date:{
+            type:String,
+            required:false,
+            trim: true
+        },
         start:{
             type:String,
             required:false,

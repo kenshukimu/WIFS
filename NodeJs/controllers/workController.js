@@ -9,10 +9,11 @@ const express = require('express');
 const session = require('express-session');
 const sendMail = require('../service/sendMail');
 const htmlmaker = require('../service/htmlMaker');
+const utils = require('../utils/utils');
 
 const init_workInfo = (req, res) => {
     //로그인 세션확인처리
-    if(req.session.userId == '' || req.session.userId  === undefined) {
+    if(!utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workInfo', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -21,7 +22,7 @@ const init_workInfo = (req, res) => {
 
 const init_workUsers = (req, res) => {   
     //로그인 세션확인처리
-    if(req.session.userId == '' || req.session.userId  === undefined) {
+    if(!utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workUsers', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -30,7 +31,7 @@ const init_workUsers = (req, res) => {
 
 const init_workVac = (req, res) => {   
     //로그인 세션확인처리
-    if(req.session.userId == '' || req.session.userId  === undefined) {
+    if(!utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         res.render('workVac', {role:req.session.role, userId:req.session.userId, projectNm:req.session.dept});  
@@ -39,7 +40,7 @@ const init_workVac = (req, res) => {
 
 const move_popupWorkInfo = (req, res) => {   
     //로그인 세션확인처리
-    if(req.session.userId == '' || req.session.userId  === undefined) {
+    if(!utils.isEmpty(req.session.userId)) {
         res.render('index' , {message:''});     
     }else{
         var _kbName;
@@ -92,13 +93,13 @@ const workinfo_find = (req, res) => {
     
     var param = new Object();
 
-    if(req.body.id !== undefined) {
+    if(!utils.isEmpty(req.body.id)) {
         param.id = req.body.id;
     }    
 
     console.log(req.body.id);
     
-    if(req.body.searchDate !== undefined) {
+    if(!utils.isEmpty(req.body.searchDate)) {
         
         var _date = req.body.searchDate.split("^");
 
@@ -109,7 +110,7 @@ const workinfo_find = (req, res) => {
         param.workDate = _dateCriteria;
     }
 
-    if(req.body.kb !== undefined) {
+    if(!utils.isEmpty(req.body.kb)) {
         var _hourCriteria = new Object();
 
         if(req.body.kb == '0') {            
@@ -121,7 +122,7 @@ const workinfo_find = (req, res) => {
         }        
     }
 
-    if(req.body._id !== undefined) {
+    if(!utils.isEmpty(req.body._id)) {
         param._id = req.body._id;
     }   
 
@@ -138,9 +139,6 @@ const workinfo_find = (req, res) => {
 const workInfo_update = (req, res) => {
 
     var database = req.app.get('database');
-
-    console.log(req.body);
-
     var _htmlparam = {
         name : req.body.name,
         workDate : req.body.workDate,
@@ -166,8 +164,7 @@ const workInfo_update = (req, res) => {
         };
 
         sendMail.sendMailByGmail(param);
-    }
-   
+    }   
 }
 
 const workInfo_delete  = (req, res) => {

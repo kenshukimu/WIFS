@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WIFS.View.Sub_View.uc_DashBoard"
+﻿<UserControl x:Class="WIFS.uc_DashBoard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

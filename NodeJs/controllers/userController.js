@@ -5,6 +5,7 @@
 * DESC   : 유저에 관련된 DAO서비스
 */
 const express = require('express');
+const utils = require('../utils/utils');
 
 const user_login = (req, res, next) => {
     
@@ -57,9 +58,6 @@ const user_logout = (req, res) => {
 
 //유저 검색
 const user_find = (req, res) => {
-
-    console.log(req.body.id);
-
     var database = req.app.get('database');
 
     var users = new database.UserModel({
@@ -162,7 +160,7 @@ const user_with_workList_forChart = (req,res) => {
     var database = req.app.get('database');
     var param = new Object();
 
-    if(req.body.id !== undefined) {
+    if(!utils.isEmpty(req.body.id))  {
         param.id = req.body.id;
     }
     
@@ -210,9 +208,6 @@ const user_with_workList_forChart = (req,res) => {
         aJson.data = aJsonb;
         
         var sJson = JSON.stringify(aJson);
-
-        console.log(sJson);
-
         res.send(sJson);
     });
 }
@@ -222,7 +217,7 @@ const user_with_workList= (req,res) => {
     var database = req.app.get('database');
     var param = new Object();
 
-    if(req.body.id !== undefined) {
+    if(!utils.isEmpty(req.body.id)) {
         param.id = req.body.id;
     }
 

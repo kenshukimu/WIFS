@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="WIFS.EditAppointmentControl"
+             Loaded="EditAppointmentControl_Loaded" 
+             x:Name="root" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:c1="http://schemas.componentone.com/winfx/2006/xaml">
+    <Grid x:Name="LayoutRoot">
+        <Grid.Resources>
+            <DataTemplate x:Key="BaseObjectItemPictTextTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Border Name="imageBorder" BorderBrush="Black" BorderThickness="1" CornerRadius="2" Height="15" Width="15" Background="{Binding Brush.Brush}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
+                    </Border>
+                    <TextBlock Grid.Column="1" Text="{Binding Text}" VerticalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ToolBarTray Grid.Row="0">
+            <ToolBar Band="1" BandIndex="1" IsTabStop="False">
+                <Button x:Name="PART_DialogSaveButton" IsTabStop="False" Click="PART_DialogSaveButton_Click" VerticalAlignment="Stretch">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="16" VerticalAlignment="Center" Text="&#xE105;" />
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">
+								<AccessText>
+									<AccessText.Text>
+										<c1:SchedulerLoc Key="EditAppointment:PART_DialogSaveButton_AccessText" DefaultValue="저장" />
+									</AccessText.Text>
+								</AccessText>
+                        </TextBlock>
+                    </StackPanel>
+                    <Button.ToolTip>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <c1:SchedulerLoc Key="EditAppointment:PART_DialogSaveButton_Tooltip" DefaultValue="Save and Close" />
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Button.ToolTip>
+                </Button>
+                <!--<Button x:Name="saveAsButton" IsTabStop="False" VerticalAlignment="Stretch" Click="saveAsButton_Click" CommandTarget="{Binding ParentCollection.ParentStorage.ScheduleStorage.Scheduler}" CommandParameter="{Binding}" Command="c1:C1Scheduler.ExportCommand">
+                    <Button.ToolTip>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <c1:SchedulerLoc Key="EditAppointment:saveAsButton_Tooltip" DefaultValue="Save As" />
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Button.ToolTip>
+                </Button>-->
+                <Button Name="deleteButton" IsTabStop="False" VerticalAlignment="Stretch" 
+                        Click="DeleteButton_Click"                        
+                        CommandTarget="{Binding ParentCollection.ParentStorage.ScheduleStorage.Scheduler}" 
+                        CommandParameter="{Binding Tag}" Command="c1:C1Scheduler.DeleteAppointmentCommand">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="16" VerticalAlignment="Center" Text="&#xE106;"/>
+                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="16" VerticalAlignment="Center" Text="삭제"/>
+                    </StackPanel>
+                    <Button.ToolTip>
+                        <TextBlock Text="{c1:SchedulerLoc Key=EditAppointment:deleteButton_ToolTip, DefaultValue=Delete}" />
+                    </Button.ToolTip>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Margin="5,5,5,0" Padding="5" BorderThickness="0,0,0,0.5">
+            <Grid Margin="5, 0, 5, 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Subject -->
+                <Label Target="{Binding ElementName=subject}" VerticalAlignment="Center" Margin="3,2,0,2" HorizontalAlignment="Left" Content="{c1:SchedulerLoc Key=EditAppointment:subject, DefaultValue=일정제목}" />
+                <TextBox x:Name="subject" TabIndex="0" Padding="2" Text="{Binding Subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="subject_TextChanged" Grid.Column="1" Grid.ColumnSpan="3" MaxLength="255" VerticalAlignment="Center" Margin="10,2,0,2" />
+                <!-- Location -->
+                <!-- Label -->
+            </Grid>
+        </Border>
+        <!-- Start/End time -->
+        <Border Grid.Row="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Margin="5" Padding="5" BorderThickness="0,0,0,0.5">
+            <Grid Margin="0,0,0,5">
+                <Grid Name="startEndPanel">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <!-- Start -->
+                    <Label VerticalAlignment="Center" Margin="10,2,0,2" Grid.Row="0" HorizontalAlignment="Left" Target="{Binding ElementName=startCalendar}">
+                        <Label.Content>
+                            <c1:SchedulerLoc Key="EditAppointment:startTime" DefaultValue="시작시간:" />
+                        </Label.Content>
+                    </Label>
+                    <c1:C1DateTimePicker x:Name="startCalendar" VerticalAlignment="Center" Margin="10,2,0,2" Padding="1" IsTabStop="False" Grid.Column="1" FirstDayOfWeek="{Binding Path=ParentCollection.ParentStorage.ScheduleStorage.Scheduler.CalendarHelper.WeekStart}" TimeFormat="ShortTime" DateFormat="Long" TimeIncrement="0:15" DateTime="{Binding Start, Mode=TwoWay}" />
+                    <!-- End -->
+                    <Label VerticalAlignment="Center" Margin="10,2,0,2" Grid.Row="1" HorizontalAlignment="Left" Target="{Binding ElementName=endCalendar}">
+                        <Label.Content>
+                            <c1:SchedulerLoc Key="EditAppointment:endTime" DefaultValue="종료시간:" />
+                        </Label.Content>
+                    </Label>
+                    <c1:C1DateTimePicker x:Name="endCalendar" VerticalAlignment="Center" Margin="10,2,0,2" Padding="1" DateTimeChanged="endCalendar_DateTimeChanged" FirstDayOfWeek="{Binding Path=ParentCollection.ParentStorage.ScheduleStorage.Scheduler.CalendarHelper.WeekStart}" TimeFormat="ShortTime" DateFormat="Long" TimeIncrement="0:15" Grid.Column="1" Grid.Row="1" />
+                    <!-- All Day -->
+                    <CheckBox Grid.Column="2" HorizontalAlignment="Left" x:Name="chkAllDay" Checked="chkAllDay_Checked" Unchecked="chkAllDay_Unchecked" VerticalAlignment="Center" Margin="10,2,0,2" IsChecked="{Binding AllDayEvent, Mode=TwoWay}">
+                        <CheckBox.Content>
+                            <c1:SchedulerLoc Key="EditAppointment:allDayEvent" DefaultValue="종일 이벤트" />
+                        </CheckBox.Content>
+                    </CheckBox>
+                </Grid>
+                <!-- recurrence info -->
+                <StackPanel Name="recurrenceInfoPanel" Visibility="Collapsed" Orientation="Horizontal">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <c1:SchedulerLoc Key="EditAppointment:recurrence" DefaultValue="Recurrence: " />
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock Name="recDescription" Text="{Binding PatternDescription, ElementName=root}" />
+                    
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Grid.Row="4" Margin="5" Padding="5">
+            <StackPanel>
+            <TextBox x:Name="body" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Text="{Binding Body, Mode=TwoWay}" AcceptsReturn="true" Height="109" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="5">
+            <CheckBox x:Name="reminderSet" IsChecked="{Binding ReminderSet, Mode=TwoWay}" VerticalAlignment="Center" Margin="10,2,0,2" 
+                      Content="{c1:SchedulerLoc Key=EditAppointment:reminderSet, DefaultValue=Re_minder:}" Visibility="Hidden" />
+        </Border>
+        <TextBox x:Name="_hidid" Visibility="Hidden"/>
+    </Grid>
+</UserControl>

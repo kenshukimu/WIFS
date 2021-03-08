@@ -15,9 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WIFS.Util;
 
-namespace WIFS.View.Sub_View
+namespace WIFS
 {
     /// <summary>
     /// Login.xaml에 대한 상호 작용 논리

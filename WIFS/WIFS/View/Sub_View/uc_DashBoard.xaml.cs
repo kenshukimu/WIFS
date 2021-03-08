@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using WIFS.Model;
-using WIFS.Util;
 
-namespace WIFS.View.Sub_View
+namespace WIFS
 {
     /// <summary>
     /// uc_DashBoard.xaml에 대한 상호 작용 논리
@@ -33,7 +32,6 @@ namespace WIFS.View.Sub_View
 
             //DashBoard에 표시 할 내용 가져오기
             showDashBoard();
-
         }
 
         private void PreData_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -133,8 +131,30 @@ namespace WIFS.View.Sub_View
                 lb_workTime.Content = "누적근무시간 : " + (_totalWorkTime / 60).ToString() + "시간 " + (_totalWorkTime % 60) + "분";
 
                 workChart.Value = Math.Round(((double)_totalWorkTime / (52 * 60)) * 100);
+
+                ScheduleEntity se = new ScheduleEntity()
+                {
+                    id = cf.userID,
+                    date = CDateTime.GetDateTimeFormat(DateTime.Now, "yyyymmdd")
+                };
+
+                var result3 = Task.Run(() => new CallWebApi().CallPostApiSchedules("scheduleFind", se));
+
+                Schedule scheduleList = JsonConvert.DeserializeObject<Schedule>(await result3);
+                cf.scheduleList = new List<AppointmentBusinessObject>();
+
+                foreach (ScheduleEntity _item in scheduleList.scheduleList)
+                {
+                    AppointmentBusinessObject newObject = new AppointmentBusinessObject();
+                    newObject.Subject = _item.subject;
+                    newObject.Start = CDateTime.GetDateFrom_yyyyMMddHHmmss(_item.start);
+                    newObject.End = CDateTime.GetDateFrom_yyyyMMddHHmmss(_item.end);
+                    newObject.Body = _item.body;
+
+                    cf.scheduleList.Add(newObject);
+                }
             }
-            catch
+            catch(Exception ex)
             {
                 //MessageBox.Show("관리자에게 문의 부탁드립니다.");
                 _vm.ShowError("관리자에게 문의 부탁드립니다.");

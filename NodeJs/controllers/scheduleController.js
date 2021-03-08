@@ -7,6 +7,7 @@
 
 const express = require('express');
 const session = require('express-session');
+const utils = require('../utils/utils');
 
 const schedule_add = (req, res) => {
 
@@ -14,6 +15,7 @@ const schedule_add = (req, res) => {
 
     var ScheduleInfos = new database.ScheduleModel({
         id:req.body.id,
+        date:req.body.date,
         subject:req.body.subject,
         start:req.body.start,
         end:req.body.end,
@@ -42,16 +44,18 @@ const schedule_find = (req, res) => {
     var database = req.app.get('database');    
     var param = new Object();
 
-    if(req.body._id !== undefined) {        
+    if(typeof req.body._id !== undefined) {        
         param.id = req.body.id;
+    }
+
+    if(!utils.isEmpty(req.body.date)) {    
+        param.date = req.body.date;
     }
 
     database.ScheduleModel.findSchedule(param, function(err, result) {
         var param = {
             scheduleList:result
         };
-
-        console.dir(param.scheduleList);
 
         res.send(param);
     });
@@ -61,9 +65,14 @@ const schedule_update = (req, res) => {
 
     var database = req.app.get('database');
 
-    console.log(req.body);
-    
-    database.ScheduleModel.updateSchedule({"_id":req.body._id}, {"status":req.body._status}, function(err, result) {
+    var setUpdateParam = new Object();
+    setUpdateParam.subject = req.body.subject;
+    setUpdateParam.date = req.body.date;
+    setUpdateParam.start = req.body.start;
+    setUpdateParam.end = req.body.end;
+    setUpdateParam.body = req.body.body;
+
+    database.ScheduleModel.updateSchedule({"_id":req.body._id}, setUpdateParam, function(err, result) {
         res.send(result);
     });    
 }
@@ -71,7 +80,7 @@ const schedule_update = (req, res) => {
 const schedule_delete  = (req, res) => {
 
     var database = req.app.get('database');
-    
+
     database.ScheduleModel.removeSchedule({"_id":req.body._id}, function(err, result) {
         res.send(result);
     });

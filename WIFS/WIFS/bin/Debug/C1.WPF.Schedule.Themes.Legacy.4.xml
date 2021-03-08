@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>C1.WPF.Schedule.Themes.Legacy.4</name>
+  </assembly>
+  <members>
+    <member name="T:C1.WPF.Schedule.Legacy.Themes">
+      <summary>
+            The <see cref="T:C1.WPF.Schedule.Legacy.Themes" /> class returns legacy themes for the <see cref="T:C1.WPF.Schedule.C1Scheduler" /> and <see cref="T:C1.WPF.Schedule.C1Calendar" /> controls.
+            </summary>
+      <example>
+        <code><![CDATA[
+            scheduler1.Theme = calendar1.Theme = C1.WPF.Schedule.Legacy.Themes.MediaPlayer;
+            ]]></code>
+      </example>
+      <example>
+        <code><![CDATA[
+            xmlns:legacy="clr-namespace:C1.WPF.Schedule.Legacy;assembly=C1.WPF.Schedule.Themes.Legacy.4"
+            <c1sched:C1Scheduler Theme="{x:Static legacy:Themes.MediaPlayer}"/>
+            <c1sched:C1Calendar Theme="{x:Static legacy:Themes.MediaPlayer}"/>
+            ]]></code>
+      </example>
+    </member>
+    <member name="P:C1.WPF.Schedule.Legacy.Themes.DuskBlue">
+      <summary>
+            Gets the ResourceDictionary representing Dusk Blue theme.
+            </summary>
+    </member>
+    <member name="P:C1.WPF.Schedule.Legacy.Themes.DuskGreen">
+      <summary>
+            Gets the ResourceDictionary representing Dusk Green theme.
+            </summary>
+    </member>
+    <member name="P:C1.WPF.Schedule.Legacy.Themes.Vista">
+      <summary>
+            Gets the ResourceDictionary representing Vista theme.
+            </summary>
+    </member>
+    <member name="P:C1.WPF.Schedule.Legacy.Themes.MediaPlayer">
+      <summary>
+            Gets the ResourceDictionary representing Media Player theme.
+            </summary>
+    </member>
+  </members>
+</doc>

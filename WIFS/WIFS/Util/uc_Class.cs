@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
 
-namespace WIFS.Util
+namespace WIFS
 {   
     public class uc_Class
     {
