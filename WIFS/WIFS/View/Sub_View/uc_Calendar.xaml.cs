@@ -15,7 +15,7 @@ namespace WIFS
     {
         AppointmentBOList _list = null;
         ClientConfig cf = InitSetting.CConf;
-        
+
         public uc_Calendar()
         {
             InitializeComponent();            
@@ -168,6 +168,31 @@ namespace WIFS
         private void OnUnload(object sender, RoutedEventArgs e)
         {
            
+        }
+
+        private void c1Scheduler1_UserAddingAppointment(object sender, C1.WPF.Schedule.AppointmentActionEventArgs e)
+        {
+            //AppointmentBusinessObject newApp = new AppointmentBusinessObject();
+            //e.Appointment.Tag = newApp;
+        }
+
+        private void c1Scheduler1_AppointmentAdded(object sender, C1.WPF.Schedule.AppointmentActionEventArgs e)
+        {
+            AppointmentBusinessObject newApp = FindMyAppointment((Guid)e.Appointment.Key[0]);
+            if(newApp.BOProperty1.Equals(""))
+            {
+                Import();
+            }
+        }
+
+        AppointmentBusinessObject FindMyAppointment(Guid id)
+        {
+            foreach (AppointmentBusinessObject app in Appointments)
+            {
+                if (app.Id == id)
+                    return app;
+            }
+            return null;
         }
     }
 }

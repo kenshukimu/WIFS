@@ -127,7 +127,7 @@ namespace WIFS
 
         private void MetroWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return)
+            if (e.Key == Key.Enter)
             {
                 BtnLogin_Click(sender, e);
             }

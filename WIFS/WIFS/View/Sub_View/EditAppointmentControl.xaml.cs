@@ -296,31 +296,37 @@ namespace WIFS
                 _id = _hidid.Text
             };
 
-            //데이터 재 취득
-            DateControl(se);
+            //데이터 재 취득 (반환처리로 하지 않으면 비동기식으로 처리되어 리스트를 먼저 가져올 수 있다.)
+            var rtn = DateControl(se);
 
             //데이터 재 취득
-            DateControl2();
+            if(rtn !=null) DateControl2();
 
             if (_parentWindow is Window)
             {
-                _parentWindow.Tag = "true";
+                _parentWindow.Tag = "true";               
+
                 ((Window)_parentWindow).Close();
             }
             else
                 ((C1Window)_parentWindow).DialogResult = MessageBoxResult.OK;
         }
 
-        private async void DateControl(ScheduleEntity se)
+        private async Task<String> DateControl(ScheduleEntity se)
         {
             if (_hidid.Text == null || _hidid.Text.Equals(""))
             {
-                await new CallWebApi().CallPostApiSchedules("scheduleAdd", se);
+                //Console.WriteLine("dataControl1");
+                var awaiter = await new CallWebApi().CallPostApiSchedules("scheduleAdd", se);
+
+                return awaiter;
             }
             else
             {
-                await new CallWebApi().CallPostApiSchedules("scheduleUpdate", se);
-            }
+                //Console.WriteLine("dataControl1");
+                var awaiter =  await new CallWebApi().CallPostApiSchedules("scheduleUpdate", se);
+                return awaiter;
+            }            
         }
 
         private async void DateControl2()
@@ -332,6 +338,8 @@ namespace WIFS
             };
 
             var result3 = Task.Run(() => new CallWebApi().CallPostApiSchedules("scheduleFind", se));
+
+            //Console.WriteLine("dataControl2");
 
             Schedule scheduleList = JsonConvert.DeserializeObject<Schedule>(await result3);
             cf.scheduleList = new List<AppointmentBusinessObject>();

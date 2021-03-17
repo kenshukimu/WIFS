@@ -609,6 +609,7 @@ namespace WIFS
                             if (overTime > 0)
                             {
                                 this.Show();
+                                cf.workStatus = "0";
                                 await window.ShowMessageAsync("알림창", "등록었습니다. 야근이 있는 경우 승인 후 야근시간이 반영되어 집니다.");
                             }
                             else

@@ -48,6 +48,8 @@
             <c1sched:C1Scheduler x:Name="scheduler1" Margin="0 -1 0 0" BorderThickness="1" Grid.Row="1" 
                                  BorderBrush="{StaticResource BorderBrush}" 
                                  EditAppointmentTemplate="{StaticResource customEditAppointmentTemplate}"
+                                 AppointmentAdded="c1Scheduler1_AppointmentAdded"
+                                 UserAddingAppointment="c1Scheduler1_UserAddingAppointment"                                 
                                  Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=c1sched:C1Scheduler, ResourceId=WeekStyle}}">
                 <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.AppointmentProperties.MappingName" Value="Properties" />
                 <c1sched:NestedPropertySetter PropertyName="DataStorage.AppointmentStorage.Mappings.Body.MappingName" Value="Body" />

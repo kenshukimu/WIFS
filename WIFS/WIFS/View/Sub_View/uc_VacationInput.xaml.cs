@@ -224,7 +224,7 @@ namespace WIFS
             //같은 날자에 등록되어 있는 자료가 있음.
             if (workList.workList.Count > 0)
             {
-                var totalWorkHour = workList.workList.Where(w => w.workHour != 0)
+                var totalWorkHour = workList.workList.Where(w => w.workOver != 0)
                                                      .GroupBy(g => g.id)
                                                      .Select(s=>new
                                                      {
