@@ -51,7 +51,7 @@ const prt_overTime_report = (req, res) => {
         dept : req.session.dept
     };
 
-    var html = htmlmaker.htmlMaker_Approve(_param);
+    var html = htmlmaker.htmlMaker_Approve(_param, req.body._kb);
 
     var option;
 

@@ -96,7 +96,7 @@
                                   + "분"
                                   + "</td>";                   
 
-                        _workList += "<td class='td_style'>" + data.workList[i].workOver + "분</td>";
+                        _workList += "<td class='td_style'>" + data.workList[i].workOver * -1 + "분</td>";
                         var _status = '처리완료';
                         if(data.workList[i].status == '0') {_status = '승인대기';}
                         _workList += "<td class='td_style'>" 

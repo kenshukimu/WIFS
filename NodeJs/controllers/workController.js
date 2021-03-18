@@ -147,20 +147,27 @@ const workInfo_update = (req, res) => {
         dept : req.session.dept
     };
 
-    var _html = htmlmaker.htmlMaker_Approve(_htmlparam);
+    var _html = htmlmaker.htmlMaker_Approve(_htmlparam, req.body._kb);
     
     database.WorkinfoModel.updateWorkInfo({"_id":req.body._id}, {"status":req.body._status}, function(err, result) {
         res.send(result);
     });    
 
-    //승인이 완료 후 특정인에게 메일보내기 (야근일 경우만 메일전송)
-    if(req.body._status == '1' && req.body._kb == '1') {
-        var param = {
-            toMail : 'shk1403@kico.co.kr;hsookim@kico.co.kr;',
-            subJect : req.session.dept + ' ' + req.body.name + ' 야근 신청' ,
-            html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 야근을 신청합니다.<div>'
-        };
-
+    //승인이 완료 후 특정인에게 메일보내기
+    if(req.body._status == '1') {
+        if(req.body._kb == '1') {
+            var param = {
+                toMail : 'shk1403@kico.co.kr;hsookim@kico.co.kr;',
+                subJect : req.session.dept + ' ' + req.body.name + ' 야근 신청' ,
+                html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 야근을 신청합니다.<div>'
+            };
+        }else{
+            var param = {
+                toMail : 'shk1403@kico.co.kr;hsookim@kico.co.kr;',
+                subJect : req.session.dept + ' ' + req.body.name + ' 대체휴가 신청' ,
+                html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 대체휴가를 신청합니다.<div>'
+            };
+        }
         sendMail.sendMailByGmail(param);
     }   
 }

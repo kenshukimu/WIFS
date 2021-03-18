@@ -4,7 +4,7 @@ var _htmlStyle = "<style>";
     _htmlStyle +="th, td {border: 1px solid #444444;}tr {height:60px;}</style>";
 
 htmlMaker.htmlMaker_Approve = 
-    function htmlMaker_Approve (param) {
+    function htmlMaker_Approve (param, kb) {
         var _html = _htmlStyle;
         _html += "<div style='text-align:center;font-size:x-large'>  ";
         _html += "<body>";
@@ -19,25 +19,39 @@ htmlMaker.htmlMaker_Approve =
         _html += param.name;
         _html += "</td></tr>";
 
-        _html += "<tr><td>근무일자</td><td>";
-        _html += param.workDate;
-        _html += "</td></tr>";
+        if(kb == '1') {
+            _html += "<tr><td>근무일자</td><td>";
+            _html += param.workDate;
+            _html += "</td></tr>";
 
-        _html += "<tr><td>출근시간</td><td>";
-        _html += param.workTimeS;
-        _html += "</td></tr>";
+            _html += "<tr><td>출근시간</td><td>";
+            _html += param.workTimeS;
+            _html += "</td></tr>";
 
-        _html += "<tr><td>퇴근시간</td><td>";
-        _html += param.workTimeE;
-        _html += "</td></tr>";
+            _html += "<tr><td>퇴근시간</td><td>";
+            _html += param.workTimeE;
+            _html += "</td></tr>";
 
-        _html += "<tr><td>야근시간</td><td>";
-        _html += param.workOver;
-        _html += "</td></tr>";
+            _html += "<tr><td>야근시간</td><td>";
+            _html += param.workOver;
+            _html += "</td></tr>";
 
-        _html += "<tr><td>야근사유</td><td>";
-        _html += param.overTimeReason;
-        _html += "</td></tr>";
+            _html += "<tr><td>야근사유</td><td>";
+            _html += param.overTimeReason;
+            _html += "</td></tr>";
+        }else{
+            _html += "<tr><td>휴가일자</td><td>";
+            _html += param.workDate;
+            _html += "</td></tr>";            
+
+            _html += "<tr><td>휴가시간</td><td>";
+            _html += param.workOver;
+            _html += "</td></tr>";
+
+            _html += "<tr><td>휴가사유</td><td>";
+            _html += param.overTimeReason;
+            _html += "</td></tr>";
+        }
 
         _html += "</tbody></table></body>";
         _html += "</div>"

@@ -164,12 +164,13 @@
 
                         if(data.approveList[i].workinfoList[j].workOver > 0) {
                           _approveList += "<td  class='td_style'>야근신청</td>";                         
+                          _approveList += "<td  class='td_style'>" + data.approveList[i].name + "</td>";
+                          _approveList += "<td  class='td_style'>" +data.approveList[i].workinfoList[j].workOver + "분</td>";
                         }else{
                           _approveList += "<td  class='td_style'>휴가신청</td>";
+                          _approveList += "<td  class='td_style'>" + data.approveList[i].name + "</td>";
+                          _approveList += "<td  class='td_style'>" +data.approveList[i].workinfoList[j].workOver * -1 + "분</td>";
                         }
-
-                        _approveList += "<td  class='td_style'>" + data.approveList[i].name + "</td>";
-                        _approveList += "<td  class='td_style'>" +data.approveList[i].workinfoList[j].workOver + "분</td>";
                         _approveList += "<td  class='td_style'>" 
                                      +  data.approveList[i].workinfoList[j].workDate.substring(0,4)
                                      +"년 "
@@ -191,8 +192,14 @@
                       if(tr.find("td:eq(4)").text() == '') return;  
                       //_id로 검색 (팝업실행)
                       var url = "/popupWorkInfo?_id=" + tr.find("td:eq(4)").text()
-                                + "&name="+tr.find("td:eq(1)").text()
-                                + "&kb=1";
+                                + "&name="+tr.find("td:eq(1)").text();
+
+                      if(tr.find("td:eq(0)").text() == '휴가신청') {
+                        url += "&kb=0";
+                      }else{
+                        url += "&kb=1";
+                      }
+                                
                       var name = "상세정보";
                       var option = "width = 500, height = 670, top = 0, left = 300, location = no"
                       window.open(url, name, option);
@@ -275,7 +282,7 @@
                   <tr>
                     <th class='td_style' width="200px">구분</th>
                     <th class='td_style' width="200px">요청자</th>
-                    <th class='td_style' width="200px">야근시간</th>
+                    <th class='td_style' width="200px">요청시간</th>
                     <th class='td_style' width="300px">요청일자</th>
                     <th style="visibility:hidden;position:absolute;">_id</th>
                   </tr>
