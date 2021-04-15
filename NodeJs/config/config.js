@@ -50,6 +50,7 @@ module.exports = {
 		{file:'../controllers/workController', path:'/popupWorkInfo', method:'move_popupWorkInfo', type:'get'},
 		{file:'../controllers/workController', path:'/workInfoUpdate', method:'workInfo_update', type:'post'},
 		{file:'../controllers/workController', path:'/workInfoDelete', method:'workInfo_delete', type:'post'},
+		{file:'../controllers/workController', path:'/workInfoUpdateAll', method:'workInfo_updateAll', type:'post'},
 
 		{file:'../controllers/dataController', path:'/dataExport', method:'init_export', type:'get'},
 		{file:'../controllers/dataController', path:'/pdfExport', method:'prt_overTime_report', type:'post'},

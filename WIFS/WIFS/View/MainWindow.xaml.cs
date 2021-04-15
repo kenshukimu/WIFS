@@ -180,12 +180,12 @@ namespace WIFS
                     _vm.ShowInformation("오전 9시30분에서 11시30분 / 오후 13시30분 ~ 오후 17시30분은 업무 집중시간입니다.");
                 }
 
-                if(cf.workStatus.Equals("1") && Int32.Parse(DateTime.Now.ToString("HHmmss")) > 183000)
-                {
-                    if(DateTime.Now.ToString("mmss").Equals("0000")) {
-                        _vm.ShowInformation("현재 연장근무중입니다. 업무 빨리 하시고 퇴근하세요.");
-                    }
-                }
+                //if(cf.workStatus.Equals("1") && Int32.Parse(DateTime.Now.ToString("HHmmss")) > 183000)
+                //{
+                //    if(DateTime.Now.ToString("mmss").Equals("0000")) {
+                //        _vm.ShowInformation("현재 연장근무중입니다. 업무 빨리 하시고 퇴근하세요.");
+                //    }
+                //}
             }
         }
 

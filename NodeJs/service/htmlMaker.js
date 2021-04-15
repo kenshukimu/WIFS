@@ -59,4 +59,23 @@ htmlMaker.htmlMaker_Approve =
         return _html;
     }
 
+    htmlMaker.htmlMaker_Approve_All = 
+    function htmlMaker_Approve_All (_body) {
+        var _html = _htmlStyle;
+
+        _html += "<div style='text-align:center;font-size:x-large'>  ";
+        _html += "<body>";
+        _html += "<table>";
+        _html += "<tbody>"      
+
+        _html += "<tr><td>신청구분</td><td>신청자</td><td>근무일자</td><td>출근시간</td><td>퇴근시간</td><td>야근시간</td><td>야근사유</td></tr>";
+
+        _html += _body      
+
+        _html += "</tbody></table></body>";
+        _html += "</div>"
+        _html += "<br><br><br><br><br>"
+        return _html;
+    }
+
 module.exports = htmlMaker;

@@ -138,7 +138,7 @@
                                 });
                               },
                               cancel: function () {
-                                  $.alert('취소');
+                                  $.alert('권한부여가 취소되었습니다.');
                               }
                             }
                         });
@@ -179,6 +179,12 @@
                                      +  data.approveList[i].workinfoList[j].workDate.substring(6,8) 
                                      +"일 "
                                      + "</td>";
+                        
+                        var _overTimeReason = data.approveList[i].workinfoList[j].overTimeReason;
+
+                        if(_overTimeReason == null) _overTimeReason = "미입력";
+                                     
+                        _approveList += "<td  class='td_style'>" + _overTimeReason + "</td>";                                     
                        
                         _approveList += "<td  style='visibility:hidden;position:absolute;'>" + data.approveList[i].workinfoList[j]._id + "</td>";
                         _approveList += "</tr>";
@@ -189,9 +195,9 @@
             
                   $("#approveList tr").click(function(){  
                     var tr = $(this);
-                      if(tr.find("td:eq(4)").text() == '') return;  
+                      if(tr.find("td:eq(5)").text() == '') return;  
                       //_id로 검색 (팝업실행)
-                      var url = "/popupWorkInfo?_id=" + tr.find("td:eq(4)").text()
+                      var url = "/popupWorkInfo?_id=" + tr.find("td:eq(5)").text()
                                 + "&name="+tr.find("td:eq(1)").text();
 
                       if(tr.find("td:eq(0)").text() == '휴가신청') {
@@ -201,13 +207,37 @@
                       }
                                 
                       var name = "상세정보";
-                      var option = "width = 500, height = 670, top = 0, left = 300, location = no"
+                      var option = "width = 500, height = 720, top = 0, left = 300, location = no"
                       window.open(url, name, option);
                   });
                 },
                 error : function() {				
                   alert("승인 정보 리스트 취득 실패");
                 }
+            });
+
+            $("#userApproveAll").click(function(){					
+              $.confirm({
+                  title: '일괄승인',
+                  content: '현재 표시된 승인요청을 일괄 승인하시겠습니까?',
+                  buttons: {
+                      confirm: function () {                        
+                        $.ajax({
+                          url: '/workInfoUpdateAll',
+                          type: 'POST',
+                          data: {},
+                          success : function() {
+                            $.alert('일괄승인이 처리되었습니다.');
+                            //location.href = "/workInfo";
+                            $("#approveList").html("");
+                          }
+                        });
+                      },
+                      cancel: function () {
+                          $.alert('승인이 취소되었습니다.');
+                      }
+                    }
+                });
             });
         });        
 
@@ -245,7 +275,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="/workUsers">상세정보관리</a></li>
+            <li><a href="/workUsers">근태상세관리</a></li>
             <li><a href="/workVac">휴가신청</a></li>
             <li><a href="#">기초코드등록</a></li>
             <li><a href="/dataExport">Export</a></li>
@@ -276,20 +306,20 @@
             </div>
           -->
             <div class="col-xs-5 col-sm-5 placeholder" >
-              <h2 class="sub-header">승인요청</h2>
+              <h2 class="sub-header">사용자정보</h2>
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th class='td_style' width="200px">구분</th>
-                    <th class='td_style' width="200px">요청자</th>
-                    <th class='td_style' width="200px">요청시간</th>
-                    <th class='td_style' width="300px">요청일자</th>
-                    <th style="visibility:hidden;position:absolute;">_id</th>
+                    <th class='td_style' width="100px">사원번호</th>
+                    <th class='td_style' width="80px">성명</th>
+                    <th class='td_style' >소속</th>
+                    <th  class='td_style'width="100px">권한</th>
+                    <th class='td_style' style="visibility:hidden;position:absolute;width: 10px;">_id</th>
                   </tr>
                 </thead>
-                <tbody id="approveList">                          
+                <tbody id="userList">                          
                 </tbody>
-              </table>
+              </table>             
               <!--
               <canvas id="notice" width="400" height="400"></canvas>
               -->
@@ -298,19 +328,32 @@
           <input type="hidden" id="role" name="role" value=<%= role %>>
           <input type="hidden" id="userId" name="userId" value=<%= userId %>>
           
-          <h2 class="sub-header">사용자정보</h2>
+          <h2 class="sub-header">
+            <div style="width: 100%; display: table;">
+              <div style="display: table-row">
+                  <div style="width: 600px; display: table-cell;"> 
+                    승인요청
+                    <font style="color: red; font-size:medium;">&nbsp;&nbsp;&nbsp;(클릭시 상세팝업표시)</font>
+                  </div>
+                  <div style="display: table-cell;" align="right"> 
+                    <button type="button" id="userApproveAll" class="btn btn-lg btn-primary" style="width: 110px;">일괄승인</button>
+                  </div>
+              </div>
+          </div>
+          </h2>         
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th class='td_style' width="300px">사원번호</th>
-                  <th class='td_style' width="300px">성명</th>
-                  <th class='td_style' width="300px">소속</th>
-                  <th  class='td_style'width="250px">관리자 권한</th>
-                  <th class='td_style' style="visibility:hidden;position:absolute;width: 10px;">_id</th>
+                  <th class='td_style' width="200px">구분</th>
+                  <th class='td_style' width="200px">요청자</th>
+                  <th class='td_style' width="200px">요청시간</th>
+                  <th class='td_style' width="300px">요청일자</th>
+                  <th class='td_style' >사유</th>
+                  <th style="visibility:hidden;position:absolute;">_id</th>
                 </tr>
               </thead>
-              <tbody id="userList">                          
+              <tbody id="approveList">                          
               </tbody>
             </table>
           </div>

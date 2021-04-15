@@ -181,6 +181,68 @@ const workInfo_delete  = (req, res) => {
     });
 }
 
+const workInfo_updateAll = (req, res) => {
+
+    var database = req.app.get('database');
+   
+    var _body = "";
+    var param = new Object();
+    param.departNo = req.session.deptNo;
+
+    var sDate = '20000101';
+    var eDate = '20300101';
+
+    database.UserModel.findUserWithWorkList(param, "0", sDate, eDate, function(err, result) {
+        var i = 0;
+        var _result;
+        result.forEach(function(doc,err) {
+            doc.workinfoList.forEach(function(wifl) {
+                _body +="<tr><td>";
+                var _tmp = "야근신청";
+                if(wifl.workOver < 0) {
+                    _tmp = "휴가신청";
+                }
+                _body +="</td>";
+                _body += _tmp;
+                _body +="<td>";
+                _body += doc.name;
+                _body +="</td>";
+                _body +="<td>";
+                _body += wifl.workDate.substring(0,4)+"년 "+ wifl.workDate.substring(4,6) +"월 "+  wifl.workDate.substring(6,8) +"일 ";
+
+                _body +="</td>";
+                _body +="<td>";
+                _body += wifl.workTimeS.substring(8,10)+ "시 "+ wifl.workTimeS.substring(10,12)+ "분";
+                _body +="</td>";
+                _body +="<td>";
+                _body += wifl.workTimeE.substring(8,10)+ "시 "+ wifl.workTimeE.substring(10,12)+ "분";
+                _body +="</td>";
+                _body +="<td>";
+                _body += wifl.workHour;
+                _body +="분</td>";
+                _body +="<td>";
+                _body += wifl.overTimeReason;
+                _body +="</td></tr>";
+                database.WorkinfoModel.updateWorkInfo({"_id":wifl._id}, {"status":"1"}, function(err, result) {
+                    _result = result;
+                });  
+            });            
+        });
+
+        var _html = htmlmaker.htmlMaker_Approve_All(_body);
+    
+        //승인이 완료 후 특정인에게 메일보내기
+        var param = {
+            toMail : 'shk1403@kico.co.kr;',
+            subJect : req.session.dept + ' 초과근무 및 대체휴가 일괄 신청' ,
+            html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 신청합니다.<div>'
+        };
+        sendMail.sendMailByGmail(param);
+        
+        res.send(_result);
+    });    
+}
+
 module.exports = {
     init_workInfo,
     init_workUsers,
@@ -189,5 +251,6 @@ module.exports = {
     move_popupWorkInfo,
     workInfo_update,
     init_workVac,
-    workInfo_delete
+    workInfo_delete,
+    workInfo_updateAll
 }

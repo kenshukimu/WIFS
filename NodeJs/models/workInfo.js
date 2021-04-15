@@ -1,5 +1,7 @@
 var Schema = {};
+
 Schema.createSchema = function(mongoose) {
+    ObjectId = mongoose.Schema.Types.ObjectId;
     var WorkInfoSchema = mongoose.Schema({
         id:{
             type:String,
@@ -89,7 +91,7 @@ Schema.createSchema = function(mongoose) {
                 console.log(err);
             });
         },
-        updateWorkInfo:function(param,updateParam,callback) {                   
+        updateWorkInfo:function(param,updateParam,callback) {               
             this.updateOne(param, {$set : updateParam})
             .then((result) => {
                 callback(null,result);
@@ -97,7 +99,7 @@ Schema.createSchema = function(mongoose) {
             .catch((err) => {
                 console.log(err);
             });
-        },
+        }
     }
 	return WorkInfoSchema;
 };
