@@ -20,8 +20,14 @@ const code_Find = (req, res) => {
 
 const weekInfo_Find = (req, res) => {
     var database = req.app.get('database');
+    var _param = new Object();
+
+    if(!req.body.year == null && req.body.year != "") {
+        _param.year = req.body.year;
+    }   
     
-    database.WeekinfoModel.findWeekInfo({'year' : req.body.year}, function(err, result) {
+    //database.WeekinfoModel.findWeekInfo({'year' : req.body.year}, function(err, result) {
+    database.WeekinfoModel.findWeekInfo(_param, function(err, result) {
         var param = {
             weekInfo:result
         };

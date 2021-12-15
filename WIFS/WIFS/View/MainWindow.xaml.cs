@@ -339,7 +339,7 @@ namespace WIFS
                 //올해년도 기준
                 WeekEntity we = new WeekEntity()
                 {
-                    year = DateTime.Now.Year.ToString()
+                    //year = DateTime.Now.Year.ToString()
                 };
 
                 var result2 = Task.Run(() => new CallWebApi().CallPostApiWeeks("getWeekInfo", we));

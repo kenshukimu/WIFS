@@ -46,39 +46,51 @@ namespace WIFS
 
             DateTime tagetDate = CDateTime.GetDateFromYYYYMMDD(sDate.Content.ToString()).AddDays(days);
 
-            if (tagetDate.Year == (DateTime.Now.Year-1))
+            //if (tagetDate.Year == (DateTime.Now.Year-1))
+            //{
+            //    if(sDate.Content.ToString().Substring(4,4).Equals("0101"))
+            //    {
+            //        //MessageBox.Show("전년도로 이동은 불가합니다.");
+            //        _vm.ShowError("전년도로 이동은 불가합니다.");
+            //        tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
+            //    }
+            //    else
+            //    {
+            //        tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
+            //    }               
+            //}else if (tagetDate.Year == (DateTime.Now.Year + 1))
+            //{
+            //    if (eDate.Content.ToString().Substring(4, 4).Equals("1231"))
+            //    {
+            //        //MessageBox.Show("내년도로 이동은 불가합니다.");
+            //        _vm.ShowError("내년도로 이동은 불가합니다.");
+            //        tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
+            //    }
+            //    else
+            //    {
+            //        tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
+            //    }
+            //}
+            try
             {
-                if(sDate.Content.ToString().Substring(4,4).Equals("0101"))
+                String[] weekinfo = new CommonUtil().getWeekInfo(tagetDate.ToString("yyyyMMdd"));
+
+                if(weekinfo[0] == null || weekinfo[1] == null)
                 {
-                    //MessageBox.Show("전년도로 이동은 불가합니다.");
-                    _vm.ShowError("전년도로 이동은 불가합니다.");
-                    tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
+                    _vm.ShowError("연도데이터가 등록되지 않아 이동이 불가합니다.");
+                    return;
                 }
-                else
-                {
-                    tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "0101");
-                }               
-            }else if (tagetDate.Year == (DateTime.Now.Year + 1))
+
+                lb_week.Content = weekinfo[0];
+                String[] wi = weekinfo[1].Split('^');
+                sDate.Content = wi[0];
+                eDate.Content = wi[1];
+
+                showDashBoard();
+            }catch (Exception ex)
             {
-                if (eDate.Content.ToString().Substring(4, 4).Equals("1231"))
-                {
-                    //MessageBox.Show("내년도로 이동은 불가합니다.");
-                    _vm.ShowError("내년도로 이동은 불가합니다.");
-                    tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
-                }
-                else
-                {
-                    tagetDate = CDateTime.GetDateFromYYYYMMDD(DateTime.Now.Year + "1231");
-                }
+                _vm.ShowError("연도데이터가 등록되지 않아 이동이 불가합니다.");
             }
-
-            String[] weekinfo = new CommonUtil().getWeekInfo(tagetDate.ToString("yyyyMMdd"));
-            lb_week.Content = weekinfo[0];
-            String[] wi = weekinfo[1].Split('^');
-            sDate.Content = wi[0];
-            eDate.Content = wi[1];
-
-            showDashBoard();
         }
 
         private async void showDashBoard()
