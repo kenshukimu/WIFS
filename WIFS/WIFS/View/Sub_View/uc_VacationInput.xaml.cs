@@ -36,7 +36,10 @@ namespace WIFS
 
             _vm = new ToastViewModel("1", 5, "TopRight", 10, 10);
             Unloaded += OnUnload;
+        }
 
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             DataTable dataTable = new DataTable();
 
             // DataTable에 Column 추가
@@ -56,15 +59,10 @@ namespace WIFS
             cbVacationKb.SelectedValuePath = "VALUE";
 
             cbVacationKb.SelectedIndex = 0;
-
-        }
-
-        void OnLoad(object sender, RoutedEventArgs e)
-        {
             setLeftTime();
             GetList();
         }
-
+         
         private void Btn_workTimeReg_Click(object sender, RoutedEventArgs e)
         {
             String _workDate = "";

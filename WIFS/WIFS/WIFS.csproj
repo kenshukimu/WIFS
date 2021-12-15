@@ -28,8 +28,8 @@
     <ProductName>출퇴근클라이언트시스템</ProductName>
     <PublisherName>교보_김현수</PublisherName>
     <SuiteName>출퇴근업무시스템</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>

@@ -111,9 +111,9 @@ namespace WIFS
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                errorMessage.Text = "데이터베이스 연결오류";
+                errorMessage.Text = "데이터베이스 연결오류(" + ex + ")";
                 errorMessage.Foreground = new SolidColorBrush(Colors.Red);
             }
         }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using ToastNotifications.Core;
 
@@ -138,7 +139,8 @@ namespace WIFS
 
                         _uc_dashboard = new uc_DashBoard();
                         uc_Class.Uc_Link(Contents_Border, _uc_dashboard);
-                        }
+                        btn_DashBoard.Focus();
+                    }
                 }
                 //18시가 되었을 때 퇴근알림 처리
                 else if (DateTime.Now.ToString("HHmmss").Equals("180000")

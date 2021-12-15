@@ -157,7 +157,7 @@ const workInfo_update = (req, res) => {
     if(req.body._status == '1') {
         if(req.body._kb == '1') {
             var param = {
-                toMail : 'shk1403@kico.co.kr;hsookim@kico.co.kr;',
+                toMail : 'shk1403@kico.co.kr;',
                 subJect : req.session.dept + ' ' + req.body.name + ' 야근 신청' ,
                 html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 야근을 신청합니다.<div>'
             };

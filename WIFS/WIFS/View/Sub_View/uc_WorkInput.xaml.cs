@@ -38,7 +38,10 @@ namespace WIFS
 
             _vm = new ToastViewModel("1", 5, "TopRight", 10, 10);
             Unloaded += OnUnload;
+        }
 
+        void OnLoad(object sender, RoutedEventArgs e)
+        {
             if (cf.workStatus != null && cf.workStatus.Equals("1"))
             {
                 txt_status.Content = "근무";
@@ -58,10 +61,10 @@ namespace WIFS
             String[] wi = weekinfo[1].Split('^');
             sDate.Content = wi[0];
             eDate.Content = wi[1];
-        }
+                        
+            sDateTime.SelectedDateTime = CDateTime.GetDateFrom_yyyyMMddHHmmss(DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + "090000");
+            eDateTime.SelectedDateTime = CDateTime.GetDateFrom_yyyyMMddHHmmss(DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + "180000");
 
-        void OnLoad(object sender, RoutedEventArgs e)
-        {
             //저장된 리스트 가져오기
             GetList();
         }

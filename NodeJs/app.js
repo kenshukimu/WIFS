@@ -21,7 +21,29 @@ const route_loader = require('./routes/route_loader');
 //설정파일
 const config = require('./config/config');
 
+//cors 설정 (API를 사용할 경우 CrossDomain에 걸릴 수 있으므로 설정할 수 있다.)
+var cors = require('cors');
+
+var whitelist = ['http://a.com', 'http://b.co.kr']
+
+var corsOptions = {
+  origin: function(origin, callback){
+  var isWhitelisted = whitelist.indexOf(origin) !== -1;
+  callback(null, isWhitelisted); 
+  // callback expects two parameters: error and options 
+  },
+  credentials:true
+}
+
 var app = express();
+app.use(cors(corsOptions));
+app.all('*',function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+
 
 //session설정
 app.use(session({
