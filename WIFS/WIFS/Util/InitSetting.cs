@@ -37,7 +37,7 @@ namespace WIFS
 
             if (!File.Exists(IniFilePath))
             {
-                String[] param = new string[5];
+                String[] param = new string[6];
                 ConfigWriteProfile(param,0);
             }
 
@@ -62,7 +62,10 @@ namespace WIFS
             cConf.workStartLastTime = ret.ToString();
 
             GetPrivateProfileString("CONFIG", "workEndLastTime", "0", ret, 15, IniFilePath);
-            cConf.workEndLastTime = ret.ToString();           
+            cConf.workEndLastTime = ret.ToString();
+
+            GetPrivateProfileString("CONFIG", "refreshtoken", "0", ret, 15, IniFilePath);
+            cConf.refreshtoken = ret.ToString();
         }
 
 
@@ -74,15 +77,17 @@ namespace WIFS
 
             if (fg == 0)
             {
-                WritePrivateProfileString("CONFIG", "ServerIP", "54.180.140.98", IniFilePath);
-                //WritePrivateProfileString("CONFIG", "ServerIP", "localhost", IniFilePath);
+                //WritePrivateProfileString("CONFIG", "ServerIP", "54.180.140.98", IniFilePath);
+                WritePrivateProfileString("CONFIG", "ServerIP", "localhost", IniFilePath);
                 WritePrivateProfileString("CONFIG", "userID", param[1], IniFilePath);
                 WritePrivateProfileString("CONFIG", "userPass", param[2], IniFilePath);
                 WritePrivateProfileString("CONFIG", "autoLogin", param[3], IniFilePath);
                 WritePrivateProfileString("CONFIG", "autoAlarm", param[4], IniFilePath);
 
-                cConf.serverIP = "54.180.140.98";
-                //cConf.serverIP = "localhost";
+                WritePrivateProfileString("CONFIG", "refreshToken", param[5], IniFilePath);
+
+                //cConf.serverIP = "54.180.140.98";
+                cConf.serverIP = "localhost";
                 cConf.userID = param[1];
                 cConf.autoLogin = param[3];
                 cConf.autoAlarm = param[4];

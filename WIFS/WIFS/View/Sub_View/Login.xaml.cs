@@ -63,9 +63,11 @@ namespace WIFS
                     return;
                 }
 
-                String[] param = new string[5];
+                String[] param = new string[6];
                 //param[0] = "ec2-54-86-81-58.compute-1.amazonaws.com";
-                param[0] = "54.180.140.98";
+                //param[0] = "54.180.140.98";
+                param[0] = "localhost";
+
                 param[1] = Txt_UserId.Text;
                 param[2] = Txt_UserPass.Password;
                 param[3] = "0";
@@ -76,9 +78,7 @@ namespace WIFS
                 cf.userPass = param[2];
                 cf.autoLogin = param[3];
                 cf.autoAlarm = param[4];
-
-                InitSetting.ConfigWriteProfile(param, 0);
-
+                
                 UserEntity ue = new UserEntity()
                 {
                     id = Txt_UserId.Text
@@ -86,6 +86,14 @@ namespace WIFS
 
                 String result = await new CallWebApi().CallPostApiUsers("userFind", ue);
                 Users userList = JsonConvert.DeserializeObject<Users>(result);
+
+                //토큰정보 저장
+                cf.accesstoken = userList.accesstoken;
+                cf.refreshtoken = userList.refreshtoken;
+
+                param[5] = cf.refreshtoken;
+
+                InitSetting.ConfigWriteProfile(param, 0);
 
                 if (userList.userList == null || userList.userList.Count != 1)
                 {

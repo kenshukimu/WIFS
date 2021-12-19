@@ -5,7 +5,7 @@
 * DESC   : 일정관리에 관련된 DAO서비스
 */
 
-const express = require('express');
+//const express = require('express');
 const session = require('express-session');
 const utils = require('../utils/utils');
 

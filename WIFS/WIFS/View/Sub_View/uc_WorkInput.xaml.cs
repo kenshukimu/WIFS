@@ -468,7 +468,22 @@ namespace WIFS
                 };
 
                 String result = await new CallWebApi().CallPostApiWorks("workInfoFind", we);
+
+                //토큰에러
+                if (result.Equals("TokenError")) { 
+
+                }
+
                 Works workList = JsonConvert.DeserializeObject<Works>(result);
+
+                if (workList.accesstoken != null && workList.accesstoken.Length > 0)
+                {
+                    cf.accesstoken = workList.accesstoken;
+
+                    result = await new CallWebApi().CallPostApiWorks("workInfoFind", we);
+                    workList = JsonConvert.DeserializeObject<Works>(result);
+
+                }
 
                 DataTable dt;
                 dt = new DataTable();
@@ -531,7 +546,10 @@ namespace WIFS
 
                 WorkDataGrid.ItemsSource = dt.DefaultView;
             }
-            catch {}
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void OnUnload(object sender, RoutedEventArgs e)

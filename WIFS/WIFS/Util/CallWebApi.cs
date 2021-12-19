@@ -13,6 +13,7 @@ namespace WIFS
     {
         public CallWebApi() { }
 
+        ClientConfig cf = InitSetting.CConf;
 
         static async Task<String> CallGetApi(String methodName)
         {
@@ -45,7 +46,7 @@ namespace WIFS
             }
             catch (HttpRequestException ex)
             {
-                rtn = ex.Message.ToString();
+                rtn = "TokenError";
             }
             return rtn;
         }
@@ -60,7 +61,7 @@ namespace WIFS
                     client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000");
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
-
+                    
                     HttpResponseMessage response = new HttpResponseMessage();
                     
                     response = await client.PostAsJsonAsync(methodName, ue).ConfigureAwait(false);
@@ -81,7 +82,7 @@ namespace WIFS
             }
             catch (HttpRequestException ex)
             {
-                rtn = ex.Message.ToString();
+                rtn = "TokenError";
             }
             return rtn;
         }
@@ -93,11 +94,15 @@ namespace WIFS
             {   
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000");
+                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000/API/");
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
 
                     HttpResponseMessage response = new HttpResponseMessage();
+
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
+
+                    we.token = cf.refreshtoken;
 
                     response = await client.PostAsJsonAsync(methodName, we).ConfigureAwait(false);
 
@@ -117,7 +122,7 @@ namespace WIFS
             }
             catch (HttpRequestException ex)
             {
-                rtn = ex.Message.ToString();
+                rtn = "TokenError";
             }
             return rtn;
         }
@@ -129,11 +134,17 @@ namespace WIFS
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000");
+                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000/API/");
+
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
 
                     HttpResponseMessage response = new HttpResponseMessage();
+
+                    //헤더 토큰(JWT.IO)
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
+
+                    we.token = cf.refreshtoken;
 
                     response = await client.PostAsJsonAsync(methodName, we).ConfigureAwait(false);
 
@@ -153,7 +164,7 @@ namespace WIFS
             }
             catch (HttpRequestException ex)
             {
-                rtn = ex.Message.ToString();
+                rtn = "TokenError";
             }
             return rtn;
         }
@@ -190,7 +201,7 @@ namespace WIFS
             }
             catch (HttpRequestException ex)
             {
-                rtn = ex.Message.ToString();
+                rtn = "TokenError";
             }
             return rtn;
         }

@@ -4,8 +4,14 @@
 * DATE   : 2021.01.25
 * DESC   : 유저에 관련된 DAO서비스
 */
-const express = require('express');
+//const express = require('express');
 const utils = require('../utils/utils');
+const config = require('../config/config');
+const jwt = require('jsonwebtoken');
+
+const redis = require('redis');
+
+const redis_client = require('../config/redis_connect');
 
 const user_login = (req, res, next) => {
     
@@ -40,9 +46,9 @@ const user_login = (req, res, next) => {
                 req.session.role =  _role;
                 req.session.dept = _dept;
                 req.session.deptNo = _deptNo;
-                res.render('workInfo', {role:_role, userId:req.session.userId, projectNm:req.session.dept});  
+                res.render('workInfo', {role:_role, userId:req.session.userId, projectNm:req.session.dept});                  
             }
-        }
+        }       
     });
 }
 
@@ -66,8 +72,22 @@ const user_find = (req, res) => {
     });
 
     database.UserModel.findUser({"id":req.body.id}, function(err, result) {
+        
+        //API 이용을 위한 토큰 생성
+        var access_token=jwt.sign({id:req.body.id},config.JWT_SECRET,{expiresIn:config.JWT_ACCESS_TIME});
+        //const refresh_token = GenerateRefreshToken(req.body.id);
+
+        refresh_token = jwt.sign({id:req.body.id}, config.JWT_REFRESH, { expiresIn: config.JWT_REFRESH_TIME });
+
+        console.log("토큰생성1",access_token);
+        console.log("토큰생성2",refresh_token);
+
+        redis_client.set(req.body.id, JSON.stringify({token: refresh_token}));
+
         var param = {
-            userList:result
+            userList:result,
+            accesstoken:access_token,
+            refreshtoken:refresh_token
         };
         
         res.send(param);
@@ -236,6 +256,31 @@ const user_with_workList= (req,res) => {
     });
 }
 
+const GetAccessToken = (user_id) => {
+    const access_token = jwt.sign({id: user_id}, config.JWT_SECRET, { expiresIn: config.JWT_ACCESS_TIME});
+    //const refresh_token = GenerateRefreshToken(user_id);
+    return access_token;
+}
+
+/*
+async function GenerateRefreshToken(user_id) {
+    const refresh_token = jwt.sign({ sub: user_id }, config.JWT_REFRESH, { expiresIn: config.JWT_REFRESH_TIME });
+
+    //console.log("GenerateRefreshToken:" + JSON.stringify({token: refresh_token}));
+    //redis_client.set(user_id.toString(), JSON.stringify({token: refresh_token}));
+    const value = await redis_client.get(user_id.toString());
+    //console.log(value);
+
+    await redis_client.get(user_id.toString(), (err, data) => {
+        if(err) throw err;
+
+        console.log("redis_client:" + user_id.toString());
+
+        redis_client.set(user_id.toString(), JSON.stringify({token: refresh_token}));
+    })
+    return refresh_token;
+}
+*/
 module.exports = {
     user_login,
     user_logout,
@@ -246,5 +291,6 @@ module.exports = {
     user_update,
     init_userReg,
     user_with_workList_forChart,
-    user_with_workList
+    user_with_workList,
+    GetAccessToken
 }

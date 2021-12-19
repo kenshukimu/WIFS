@@ -18,5 +18,8 @@ namespace WIFS
         public string date { get; set; }
         public string start { get; set; }
         public string end { get; set; }
+
+
+        public string token { get; set; }
     }
 }

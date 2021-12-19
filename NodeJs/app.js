@@ -18,6 +18,9 @@ const session = require('express-session');
 const database = require('./database/database');
 const route_loader = require('./routes/route_loader');
 
+const auth_middleware = require('./routes/auth.middleware');
+const userController = require('./controllers/userController');
+
 //설정파일
 const config = require('./config/config');
 
@@ -39,11 +42,10 @@ var app = express();
 app.use(cors(corsOptions));
 app.all('*',function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
-
 
 //session설정
 app.use(session({
@@ -78,10 +80,43 @@ http.createServer(app).listen(app.get('port'), function() {
     database.init(app, config);
 });
 
+app.use('/API/:id' ,async function (req, res, next)  { 
+    var _statusCode = auth_middleware.verifyToken(req, res)
+
+    console.log("_statusCode1 : " + _statusCode);
+
+    if(_statusCode != '200')  {
+        _statusCode = await auth_middleware.verifyRefreshToken(req,res);   
+
+        console.log("_statusCode2 : " + _statusCode);
+
+        if(_statusCode != '401')  {
+            //Access값을 재 전송
+            //next();
+            var access_token = userController.GetAccessToken(_statusCode);
+
+            console.log("_access_token : " + access_token);
+
+            var param = {
+                accesstoken:access_token
+            };            
+            res.send(param);
+        }else{
+            return res.status(401).json({status: false, message: "Refresh Token is not valid"});
+        }
+    }else{
+        next();
+    };    
+});
+
 //app설정이 다 된 후 처리
 route_loader.init(app, router);
 
+//토큰 채크를 위한 라우터
+//router.post('/token', auth_middleware.verifyRefreshToken, userController.GetAccessToken);
+
 //기본 서버 화면 설정
-app.use('/',function(req, res, next) {    
+app.use('/',function(req, res, next) { 
     res.render('index' , {message:''});         
 });
+

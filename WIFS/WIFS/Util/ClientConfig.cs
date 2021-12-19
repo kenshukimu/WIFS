@@ -26,6 +26,9 @@ namespace WIFS
 
         public string dept;
 
+        public string accesstoken;
+        public string refreshtoken;
+
         public IList<WeekEntity> weekList { get; set; }
         public IList<AppointmentBusinessObject> scheduleList { get; set; }
     }

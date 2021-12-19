@@ -5,7 +5,10 @@
 * DESC   : 코드테이블에 관련된 DAO서비스
 */
 
-const express = require('express')
+//const express = require('express');
+const utils = require('../utils/utils');
+
+const auth_middleware = require('../routes/auth.middleware');
 
 const code_Find = (req, res) => {
     var database = req.app.get('database');
@@ -18,7 +21,11 @@ const code_Find = (req, res) => {
     });
 }
 
+//API 처리 (주차가져오기)
 const weekInfo_Find = (req, res) => {
+    
+    //auth_middleware.verifyToken(req, res);
+
     var database = req.app.get('database');
     var _param = new Object();
 

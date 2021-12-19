@@ -12,11 +12,21 @@
 	db_url : 'mongodb://hsookim:1234qwer!@ec2-54-180-140-98.ap-northeast-2.compute.amazonaws.com:27017',
  */
 
+/* aws setting 
+	dns : ec2-54-180-140-98.ap-northeast-2.compute.amazonaws.com
+	ip  : 54.180.140.98
+*/
+
 module.exports = {
 	server_port: 3000,
 	db_url : 'mongodb://hsookim:1234qwer!@ec2-54-180-140-98.ap-northeast-2.compute.amazonaws.com:27017/wifs?authSource=admin',
 	gmailID: 'kenshukimu@gmail.com',
 	gmailPassword: '!rhdvkfvkf08',
+	JWT_SECRET:'wifs_secretKey',
+	JWT_REFRESH:'wifs_refreshKey',
+	JWT_ACCESS_TIME:'1m',
+	JWT_REFRESH_TIME:'1m',
+	REDIS_URL:'redis://default:1234qwer!@54.180.140.98:6380',
 	db_schemas: [
 		{file:'../models/users', collection:'users', schemaName:'Users', modelName:'UserModel'},
 		{file:'../models/codes', collection:'codes', schemaName:'Codes', modelName:'CodesModel'},
@@ -39,10 +49,10 @@ module.exports = {
 		{file:'../controllers/workController', path:'/workVac', method:'init_workVac', type:'get'},
 
 		{file:'../controllers/codeController', path:'/getCode', method:'code_Find', type:'post'},
-		{file:'../controllers/codeController', path:'/getWeekInfo', method:'weekInfo_Find', type:'post'},
+		{file:'../controllers/codeController', path:'/API/getWeekInfo', method:'weekInfo_Find', type:'post'},
 
 		{file:'../controllers/workController', path:'/workInfoAdd', method:'workinfo_add', type:'post'},
-		{file:'../controllers/workController', path:'/workInfoFind', method:'workinfo_find', type:'post'},
+		{file:'../controllers/workController', path:'/API/workInfoFind', method:'workinfo_find', type:'post'},
 
 		{file:'../controllers/userController', path:'/userWithWorkListForChart', method:'user_with_workList_forChart', type:'post'},
 		{file:'../controllers/userController', path:'/userWithWorkList', method:'user_with_workList', type:'post'},

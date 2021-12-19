@@ -6,6 +6,7 @@ namespace WIFS
     public class Works
     {
         public IList<WorkEntity> workList { get; set; }
+        public String accesstoken { get; set; }
     }
     public class WorkEntity
     {
@@ -20,5 +21,8 @@ namespace WIFS
         public string status { get; set; }
         public string result { get; set; }
         public string overTimeReason { get; set; }
+
+
+        public string token { get; set; }
     }
 }

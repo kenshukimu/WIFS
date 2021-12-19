@@ -55,10 +55,7 @@ namespace WIFS
 
             InitSetting.Instance.Init();
 
-            AutoLogin();
-
-            //전에 처리하지 않은 데이터 확인
-            checkData();
+            AutoLogin();            
         }
 
         private void OnUnload(object sender, RoutedEventArgs e)
@@ -363,6 +360,9 @@ namespace WIFS
                 uc_Class.Uc_Link(Contents_Border, _uc_dashboard);
 
                 showNotify();
+
+                //전에 처리하지 않은 데이터 확인
+                checkData();
             }
             catch(Exception ex)
             {
