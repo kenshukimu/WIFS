@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const config = require('../config/config');
 
+const logger = require('../config/winston')('server');
+
 var sendMail = {};
 
 sendMail.sendMailByGmail = 
@@ -30,10 +32,11 @@ function sendMailByGmail (param) {
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             //에러
-            console.log(error);
+            logger.error('Error sending email : ' + error);
         }
         //전송 완료
-        console.log("Finish sending email : " + info.response);        
+        //console.log("Finish sending email : " + info.response);        
+        logger.info("Finish sending email : " + info.response);
         transporter.close()
     })
 }

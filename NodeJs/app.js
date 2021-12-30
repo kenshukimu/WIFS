@@ -6,23 +6,21 @@ db.getCollection('users').find({})
 */
 const express = require('express')
     , http = require('http')
-    , path = require('path');
-
-const bodyParser = require('body-parser')
-    ,static = require('serve-static');
-
-const mongoose = require('mongoose');
-
-const session = require('express-session');
-
-const database = require('./database/database');
-const route_loader = require('./routes/route_loader');
-
-const auth_middleware = require('./routes/auth.middleware');
-const userController = require('./controllers/userController');
+    , bodyParser = require('body-parser')
+    , static = require('serve-static')
+    , mongoose = require('mongoose')
+    , session = require('express-session')
+    , path = require('path')
+    , database = require('./database/database')
+    , route_loader = require('./routes/route_loader')
+    , auth_middleware = require('./routes/auth.middleware')
+    , userController = require('./controllers/userController');
 
 //설정파일
 const config = require('./config/config');
+
+//log설정파일
+const logger = require('./config/winston')('server');
 
 //cors 설정 (API를 사용할 경우 CrossDomain에 걸릴 수 있으므로 설정할 수 있다.)
 var cors = require('cors');
@@ -79,7 +77,7 @@ http.createServer(app).listen(app.get('port'), function() {
     console.log('ExpressServer  기동');
     database.init(app, config);
 });
-
+/*
 app.use('/API/:id' ,async function (req, res, next)  { 
     var _statusCode = auth_middleware.verifyToken(req, res)
 
@@ -108,7 +106,7 @@ app.use('/API/:id' ,async function (req, res, next)  {
         next();
     };    
 });
-
+*/
 //app설정이 다 된 후 처리
 route_loader.init(app, router);
 

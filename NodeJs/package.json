@@ -40,6 +40,8 @@
     "node-excel-export": "^1.4.4",
     "nodemailer": "^6.4.18",
     "redis": "^4.0.1",
-    "serve-static": "^1.14.1"
+    "serve-static": "^1.14.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
   }
 }

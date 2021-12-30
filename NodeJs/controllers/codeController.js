@@ -24,7 +24,7 @@ const code_Find = (req, res) => {
 //API 처리 (주차가져오기)
 const weekInfo_Find = (req, res) => {
     
-    //auth_middleware.verifyToken(req, res);
+        //auth_middleware.verifyToken(req, res);
 
     var database = req.app.get('database');
     var _param = new Object();

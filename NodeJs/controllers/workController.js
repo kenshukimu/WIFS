@@ -11,6 +11,8 @@ const sendMail = require('../service/sendMail');
 const htmlmaker = require('../service/htmlMaker');
 const utils = require('../utils/utils');
 
+const logger = require('../config/winston')('server');
+
 const init_workInfo = (req, res) => {
     //로그인 세션확인처리
     if(utils.isEmpty(req.session.userId)) {
@@ -236,7 +238,7 @@ const workInfo_updateAll = (req, res) => {
             toMail : 'shk1403@kico.co.kr;',
             subJect : req.session.dept + ' 초과근무 및 대체휴가 일괄 신청' ,
             html : _html + '<div style="font: bold italic 2.0em/1.0em 돋움체;"> 위와 같이 신청합니다.<div>'
-        };
+        };        
         sendMail.sendMailByGmail(param);
         
         res.send(_result);

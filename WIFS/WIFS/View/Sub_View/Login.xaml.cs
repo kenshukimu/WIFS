@@ -31,7 +31,7 @@ namespace WIFS
 
             ClientConfig cf = InitSetting.CConf;
 
-            Txt_ServerIp.Text = "54.180.140.98";
+            Txt_ServerIp.Text = "222.234.39.68";
             //Txt_ServerIp.Text = "localhost";
             Txt_UserId.Text = cf.userID;
 
@@ -65,8 +65,8 @@ namespace WIFS
 
                 String[] param = new string[6];
                 //param[0] = "ec2-54-86-81-58.compute-1.amazonaws.com";
-                //param[0] = "54.180.140.98";
-                param[0] = "localhost";
+                param[0] = "222.234.39.68";
+                //param[0] = "localhost";
 
                 param[1] = Txt_UserId.Text;
                 param[2] = Txt_UserPass.Password;

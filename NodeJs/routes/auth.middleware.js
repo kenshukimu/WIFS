@@ -32,10 +32,10 @@ async function verifyRefreshToken(req, res, next) {
     try {
         const decoded = jwt.verify(token, config.JWT_REFRESH);    
         //console.log("client : " + JSON.parse(await redis_client.get(decoded.id.toString())).token);
-        console.log("auth.middle1");
+        //console.log("auth.middle1");
         if(JSON.parse(await redis_client.get(decoded.id.toString())).token != token) {
 
-            console.log("auth.middle2");
+            //console.log("auth.middle2");
             //return res.status(401).json({status: false, message: "Invalid request. Token is not same in store."});
             return "401";
         }

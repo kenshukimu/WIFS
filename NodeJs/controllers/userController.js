@@ -8,6 +8,7 @@
 const utils = require('../utils/utils');
 const config = require('../config/config');
 const jwt = require('jsonwebtoken');
+const logger = require('../config/winston')('server');
 
 const redis = require('redis');
 
@@ -72,6 +73,9 @@ const user_find = (req, res) => {
     });
 
     database.UserModel.findUser({"id":req.body.id}, function(err, result) {
+
+        let ts = Date.now;
+        logger.info(ts + ' ' + req.body.id + ' login!');
         
         //API 이용을 위한 토큰 생성
         var access_token=jwt.sign({id:req.body.id},config.JWT_SECRET,{expiresIn:config.JWT_ACCESS_TIME});
@@ -79,8 +83,8 @@ const user_find = (req, res) => {
 
         refresh_token = jwt.sign({id:req.body.id}, config.JWT_REFRESH, { expiresIn: config.JWT_REFRESH_TIME });
 
-        console.log("토큰생성1",access_token);
-        console.log("토큰생성2",refresh_token);
+        //console.log("토큰생성1",access_token);
+        //console.log("토큰생성2",refresh_token);
 
         redis_client.set(req.body.id, JSON.stringify({token: refresh_token}));
 

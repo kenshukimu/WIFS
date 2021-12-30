@@ -38,7 +38,7 @@ namespace WIFS
         {
             ClientConfig cf = InitSetting.CConf;
 
-            String[] param = new string[5];
+            String[] param = new string[6];
 
             param[0] = txt_ServerIP.Text.Trim();
             param[1] = txt_UserID.Text;

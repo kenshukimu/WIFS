@@ -44,7 +44,7 @@ namespace WIFS
             StringBuilder ret = new StringBuilder();
             GetPrivateProfileString("CONFIG", "ServerIP", " ", ret, 100, IniFilePath);
             //cConf.serverIP = ret.ToString();
-            cConf.serverIP = "54.180.140.98";
+            cConf.serverIP = "222.234.39.68";
 
             GetPrivateProfileString("CONFIG", "userID", " ", ret, 20, IniFilePath);
             cConf.userID = ret.ToString();
@@ -86,8 +86,8 @@ namespace WIFS
 
                 WritePrivateProfileString("CONFIG", "refreshToken", param[5], IniFilePath);
 
-                //cConf.serverIP = "54.180.140.98";
-                cConf.serverIP = "localhost";
+                cConf.serverIP = "222.234.39.68";
+                //cConf.serverIP = "localhost";
                 cConf.userID = param[1];
                 cConf.autoLogin = param[3];
                 cConf.autoAlarm = param[4];

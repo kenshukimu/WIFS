@@ -94,15 +94,15 @@ namespace WIFS
             {   
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000/API/");
+                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000");
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
 
                     HttpResponseMessage response = new HttpResponseMessage();
 
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
 
-                    we.token = cf.refreshtoken;
+                    //we.token = cf.refreshtoken;
 
                     response = await client.PostAsJsonAsync(methodName, we).ConfigureAwait(false);
 
@@ -134,7 +134,7 @@ namespace WIFS
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000/API/");
+                    client.BaseAddress = new Uri("http://" + InitSetting.CConf.serverIP + ":3000");
 
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
@@ -142,9 +142,8 @@ namespace WIFS
                     HttpResponseMessage response = new HttpResponseMessage();
 
                     //헤더 토큰(JWT.IO)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
-
-                    we.token = cf.refreshtoken;
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(cf.accesstoken);
+                    //we.token = cf.refreshtoken;
 
                     response = await client.PostAsJsonAsync(methodName, we).ConfigureAwait(false);
 

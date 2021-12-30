@@ -42,7 +42,7 @@ namespace WIFS
 
             _vm = new ToastViewModel("0", 15, "", 5, 5);
             _vm2 = new ToastViewModel("0", 15, "BottomCenter", 1, 
-               System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height / 2);
+            System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height / 2);
 
             Unloaded += OnUnload;
 
@@ -366,7 +366,8 @@ namespace WIFS
             }
             catch(Exception ex)
             {
-                //MessageBox.Show("관리자에게 문의 부탁드립니다.");
+                MessageBox.Show("관리자에게 문의 부탁드립니다.");
+                System.Windows.Application.Current.Shutdown();
             }
         }
 
