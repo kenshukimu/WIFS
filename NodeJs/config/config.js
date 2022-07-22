@@ -8,8 +8,8 @@
 
 /*
  * 설정 
-	db_url : 'mongodb+srv://root:1234qwer!@hscluster.yyh81.mongodb.net/wifs?retryWrites=true&w=majority',
-	db_url : 'mongodb://hsookim:1234qwer!@ec2-54-180-140-98.ap-northeast-2.compute.amazonaws.com:27017',
+	db_url : '',
+	db_url : '',
  */
 
 /* aws setting 
