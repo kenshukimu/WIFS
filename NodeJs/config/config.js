@@ -19,15 +19,15 @@
 
 module.exports = {
 	server_port: 3000,
-	//db_url : 'mongodb://hsookim:1234qwer!@ec2-54-180-140-98.ap-northeast-2.compute.amazonaws.com:27017/wifs?authSource=admin',
-	db_url : 'mongodb://hsookim:1234qwer!@222.234.39.68:27017/wifs?authSource=admin',
-	gmailID: 'kenshukimu@gmail.com',
-	gmailPassword: '!rhdvkfvkf08',
+	//db_url : '',
+	db_url : '',
+	gmailID: '',
+	gmailPassword: '',
 	JWT_SECRET:'wifs_secretKey',	
 	JWT_REFRESH:'wifs_refreshKey',
 	JWT_ACCESS_TIME:'1m',
 	JWT_REFRESH_TIME:'14d',
-	REDIS_URL:'redis://default:1234qwer!@222.234.39.68:6385',
+	REDIS_URL:'',
 	db_schemas: [
 		{file:'../models/users', collection:'users', schemaName:'Users', modelName:'UserModel'},
 		{file:'../models/codes', collection:'codes', schemaName:'Codes', modelName:'CodesModel'},
